@@ -1,0 +1,56 @@
+---
+interface Props {
+  slug: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags?: string[];
+  readingTime?: string;
+}
+
+const { slug, title, description, pubDate, tags = [], readingTime = '4 min' } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('ca-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric'
+}).format(pubDate);
+---
+
+<article class="group bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-6 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4">
+  <div class="space-y-2.5">
+    <div class="flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
+      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+      <span>{readingTime} de lectura</span>
+    </div>
+
+    <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
+      <a href={`/blog/${slug}`}>
+        {title}
+      </a>
+    </h3>
+
+    <p class="text-sm text-[var(--text-muted)] line-clamp-3 leading-relaxed font-serif">
+      {description}
+    </p>
+  </div>
+
+  <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2">
+    <div class="flex items-center gap-1.5 flex-wrap">
+      {tags.map((tag) => (
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[var(--border-color)]/50 text-[var(--text-muted)]">
+          #{tag}
+        </span>
+      ))}
+    </div>
+
+    <a
+      href={`/blog/${slug}`}
+      class="text-xs font-sans font-semibold text-[var(--accent)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 shrink-0"
+    >
+      <span>Llegir</span>
+      <span>→</span>
+    </a>
+  </div>
+</article>
+

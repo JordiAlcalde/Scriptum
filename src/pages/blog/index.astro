@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title="Blog & Apunts | Scriptum" description="Articles de reflexió, processos d'escriptura i pensament a Scriptum.">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-10">
+    <header class="space-y-3 pb-8 border-b border-[var(--border-color)]">
+      <span class="text-xs uppercase font-mono tracking-widest text-[var(--accent)] font-semibold">
+        Quadern d'Apunts
+      </span>
+      <h1 class="font-display font-bold text-3xl sm:text-5xl text-[var(--text-primary)]">
+        El Blog
+      </h1>
+      <p class="font-serif text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
+        Reflexions, assajos breus sobre literatura i el plaer de mirar el món a través de les paraules.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {sortedPosts.map((post) => (
+        <PostCard
+          slug={post.slug}
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          tags={post.data.tags}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+

@@ -1,0 +1,77 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  author?: string;
+  tags?: string[];
+  readingTime?: string;
+}
+
+const { title, description, pubDate, author = 'Scriptum', tags = [], readingTime = '4 min' } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('ca-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric'
+}).format(pubDate);
+---
+
+<BaseLayout title={`${title} | Blog Scriptum`} description={description}>
+  <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div class="mb-6">
+      <a href="/blog" class="text-xs font-sans font-semibold text-[var(--accent)] hover:underline inline-flex items-center gap-1">
+        <span>← Tornar a tots els articles</span>
+      </a>
+    </div>
+
+    <header class="space-y-4 pb-8 border-b border-[var(--border-color)] mb-10">
+      <div class="flex items-center gap-3 text-xs font-mono text-[var(--text-muted)] flex-wrap">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span>·</span>
+        <span>Per {author}</span>
+        <span>·</span>
+        <span>⏱️ {readingTime} de lectura</span>
+      </div>
+
+      <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
+        {title}
+      </h1>
+
+      <p class="text-base text-[var(--text-muted)] font-serif italic leading-relaxed">
+        {description}
+      </p>
+
+      {tags.length > 0 && (
+        <div class="flex items-center gap-2 pt-2 flex-wrap">
+          {tags.map((tag) => (
+            <span class="text-xs font-mono px-2.5 py-0.5 rounded-md bg-[var(--border-color)]/60 text-[var(--text-muted)]">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose-literaria">
+      <slot />
+    </div>
+
+    <div class="scene-break my-16 text-center">
+      <span>❦</span>
+    </div>
+
+    <div class="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs">
+      <div>
+        <h4 class="font-display font-bold text-sm text-[var(--text-primary)]">T'ha agradat aquesta lectura?</h4>
+        <p class="text-[var(--text-muted)]">Descobreix més articles i relats a la biblioteca de Scriptum.</p>
+      </div>
+      <a href="/relats" class="px-4 py-2 rounded-xl bg-[var(--accent)] text-white font-semibold shrink-0 hover:opacity-90 transition-opacity">
+        Explorar relats
+      </a>
+    </div>
+  </article>
+</BaseLayout>
+

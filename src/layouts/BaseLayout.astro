@@ -1,0 +1,51 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Scriptum — Espai literari, relats per capítols i pensament',
+  description = 'Scriptum és un refugi per a la lectura pausada, obres literàries organitzades per capítols i articles de reflexió.',
+  image = '/images/og-scriptum.jpg',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+
+    <!-- Script de prevenció de parpelleig de tema -->
+    <script is:inline>
+      const savedTheme = localStorage.getItem('scriptum-theme') || 'paper';
+      if (savedTheme !== 'paper') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col antialiased">
+    <Header />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+

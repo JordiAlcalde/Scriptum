@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allRelats = await getCollection('relats');
+  const bookIds = Array.from(new Set(allRelats.map(r => r.data.llibreId)));
+
+  return bookIds.map((llibreId) => {
+    const chapters = allRelats
+      .filter(r => r.data.llibreId === llibreId)
+      .sort((a, b) => a.data.capitol - b.data.capitol);
+    
+    const llibreTitol = chapters[0]?.data.llibre || 'Obra';
+    const sinopsi = chapters[0]?.data.sinopsi || '';
+
+    return {
+      params: { llibre: llibreId },
+      props: { llibreId, llibreTitol, sinopsi, chapters }
+    };
+  });
+}
+
+const { llibreId, llibreTitol, sinopsi, chapters } = Astro.props;
+---
+
+<BaseLayout title={`${llibreTitol} — Índex de l'obra | Scriptum`} description={sinopsi}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-12">
+    <!-- Enllaç enrere -->
+    <a href="/relats" class="text-xs font-sans font-semibold text-[var(--accent)] hover:underline inline-flex items-center gap-1">
+      <span>← Tornar a la biblioteca</span>
+    </a>
+
+    <!-- Capçalera del llibre -->
+    <div class="p-8 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] flex flex-col md:flex-row gap-8 items-start">
+      <div class="w-full md:w-48 h-64 rounded-2xl bg-gradient-to-br from-stone-800 to-amber-950 p-6 text-white flex flex-col justify-between shrink-0 shadow-lg relative overflow-hidden">
+        <span class="text-[10px] tracking-widest uppercase font-mono opacity-70">Scriptum</span>
+        <h2 class="font-display font-bold text-2xl leading-tight">
+          {llibreTitol}
+        </h2>
+        <span class="text-xs font-mono opacity-80 border-t border-white/20 pt-2">{chapters.length} capítols</span>
+      </div>
+
+      <div class="flex-1 space-y-4">
+        <span class="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold">
+          Novel·la / Sèrie
+        </span>
+        <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)]">
+          {llibreTitol}
+        </h1>
+        <p class="font-serif text-base text-[var(--text-muted)] leading-relaxed">
+          {sinopsi}
+        </p>
+
+        <div class="pt-4 flex items-center gap-3">
+          {chapters.length > 0 && (
+            <a
+              href={`/relats/${llibreId}/${chapters[0].slug.split('/').pop()}`}
+              class="px-6 py-3 rounded-xl bg-[var(--accent)] text-white text-xs font-sans font-semibold hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2"
+            >
+              <span>Començar Capítol 1</span>
+              <span>📖</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <!-- Índex de Capítols Ordenat -->
+    <section class="space-y-6">
+      <div class="border-b border-[var(--border-color)] pb-3">
+        <h2 class="font-display font-bold text-2xl text-[var(--text-primary)]">
+          Índex de Capítols
+        </h2>
+      </div>
+
+      <div class="space-y-3">
+        {chapters.map((cap) => {
+          const capSlug = cap.slug.split('/').pop();
+          return (
+            <a
+              href={`/relats/${llibreId}/${capSlug}`}
+              class="group p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex items-center justify-between gap-4 shadow-2xs"
+            >
+              <div class="space-y-1">
+                <div class="flex items-center gap-2 text-xs font-mono text-[var(--accent)]">
+                  <span>Capítol {cap.data.capitol}</span>
+                  <span>·</span>
+                  <span class="text-[var(--text-muted)]">{cap.data.tempsLectura || '5 min'}</span>
+                </div>
+                <h3 class="font-display font-bold text-lg text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+                  {cap.data.title}
+                </h3>
+                {cap.data.sinopsi && (
+                  <p class="text-xs text-[var(--text-muted)] font-serif line-clamp-1">
+                    {cap.data.sinopsi}
+                  </p>
+                )}
+              </div>
+
+              <span class="text-xs font-sans font-semibold text-[var(--accent)] group-hover:translate-x-1 transition-transform shrink-0">
+                Llegir →
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+

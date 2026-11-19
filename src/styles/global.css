@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-main: #FBF9F5;
+    --card-bg: #FFFFFF;
+    --border-color: #E8E3D9;
+    --text-primary: #2C2523;
+    --text-muted: #7A6F68;
+    --accent: #8C4A2F;
+  }
+
+  body[data-theme="sepia"] {
+    --bg-main: #F4ECD8;
+    --card-bg: #EFE5CE;
+    --border-color: #DDCFB2;
+    --text-primary: #382A1C;
+    --text-muted: #7E6D55;
+    --accent: #8C4320;
+  }
+
+  body[data-theme="nocturn"] {
+    --bg-main: #141414;
+    --card-bg: #1C1C1C;
+    --border-color: #2D2D2D;
+    --text-primary: #E6E4DE;
+    --text-muted: #9E9C96;
+    --accent: #E08253;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Literata', 'Lora', serif;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+/* Lector Literari: Estils de text i paràgrafs */
+.prose-literaria {
+  line-height: 1.85;
+  font-size: var(--reading-font-size, 1.125rem);
+}
+
+.prose-literaria p {
+  margin-bottom: 1.5em;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+/* Capitular (lletra inicial gran per a inici de capítol) */
+.drop-cap::first-letter {
+  font-family: 'Playfair Display', serif;
+  float: left;
+  font-size: 3.75em;
+  line-height: 0.8;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-bottom: 4px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* Separador de seccions literari */
+.scene-break {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.scene-break::before,
+.scene-break::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  background-color: var(--border-color);
+}
+

@@ -1,0 +1,143 @@
+---
+interface Props {
+  llibreTitol?: string;
+  capitolNum?: number;
+  totalCapitols?: number;
+}
+
+const { llibreTitol, capitolNum, totalCapitols } = Astro.props;
+---
+
+<div class="sticky top-18 z-30 py-3 backdrop-blur-md bg-[var(--bg-main)]/95 border-b border-[var(--border-color)] transition-colors">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 text-xs font-sans">
+    
+    <!-- Info del llibre / Capítol -->
+    <div class="flex items-center gap-2 truncate">
+      {llibreTitol && (
+        <a href="/relats" class="text-[var(--text-muted)] hover:text-[var(--accent)] truncate transition-colors flex items-center gap-1 font-medium">
+          <span>←</span>
+          <span class="truncate">{llibreTitol}</span>
+        </a>
+      )}
+      {capitolNum && (
+        <span class="px-2 py-0.5 rounded bg-[var(--border-color)]/60 text-[var(--text-muted)] font-mono text-[11px] shrink-0">
+          Cap. {capitolNum} {totalCapitols ? `/ ${totalCapitols}` : ''}
+        </span>
+      )}
+    </div>
+
+    <!-- Controls de Lectura Personalitzada -->
+    <div class="flex items-center gap-2 shrink-0">
+      <!-- Mida de font: Petita, Normal, Gran -->
+      <div class="flex items-center border border-[var(--border-color)] rounded-lg overflow-hidden bg-[var(--card-bg)]">
+        <button
+          id="btn-font-decrease"
+          type="button"
+          class="px-2.5 py-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border-color)]/40 transition-colors font-serif font-bold text-xs"
+          title="Reduir mida de lletra"
+        >
+          A-
+        </button>
+        <span class="w-[1px] h-4 bg-[var(--border-color)]"></span>
+        <button
+          id="btn-font-reset"
+          type="button"
+          class="px-2 py-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border-color)]/40 transition-colors font-sans text-[10px]"
+          title="Mida estàndard"
+        >
+          Normal
+        </button>
+        <span class="w-[1px] h-4 bg-[var(--border-color)]"></span>
+        <button
+          id="btn-font-increase"
+          type="button"
+          class="px-2.5 py-1 text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--border-color)]/40 transition-colors font-serif font-bold text-sm"
+          title="Augmentar mida de lletra"
+        >
+          A+
+        </button>
+      </div>
+
+      <!-- Selector de fons de lectura directe: Paper, Sèpia, Fosc -->
+      <div class="hidden sm:flex items-center gap-1 border border-[var(--border-color)] rounded-lg p-0.5 bg-[var(--card-bg)]">
+        <button
+          data-set-theme="paper"
+          class="theme-btn px-2 py-1 rounded text-[11px] transition-colors"
+          title="Lectura Paper Clar"
+        >
+          📜
+        </button>
+        <button
+          data-set-theme="sepia"
+          class="theme-btn px-2 py-1 rounded text-[11px] transition-colors"
+          title="Lectura Sèpia Càlid"
+        >
+          ☕
+        </button>
+        <button
+          data-set-theme="nocturn"
+          class="theme-btn px-2 py-1 rounded text-[11px] transition-colors"
+          title="Lectura Nocturna"
+        >
+          🌙
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de progrés de lectura del capítol -->
+  <div class="absolute bottom-0 left-0 w-full h-[2px] bg-transparent">
+    <div id="reading-progress-bar" class="h-full bg-[var(--accent)] w-0 transition-all duration-75"></div>
+  </div>
+</div>
+
+<script>
+  // Control de mida de lletra
+  const sizes = ['1rem', '1.125rem', '1.25rem', '1.375rem'];
+  let currentSizeIdx = parseInt(localStorage.getItem('scriptum-font-size-idx') || '1', 10);
+
+  function applyFontSize(idx) {
+    currentSizeIdx = Math.max(0, Math.min(sizes.length - 1, idx));
+    document.documentElement.style.setProperty('--reading-font-size', sizes[currentSizeIdx]);
+    localStorage.setItem('scriptum-font-size-idx', String(currentSizeIdx));
+  }
+
+  applyFontSize(currentSizeIdx);
+
+  document.getElementById('btn-font-increase')?.addEventListener('click', () => {
+    applyFontSize(currentSizeIdx + 1);
+  });
+
+  document.getElementById('btn-font-decrease')?.addEventListener('click', () => {
+    applyFontSize(currentSizeIdx - 1);
+  });
+
+  document.getElementById('btn-font-reset')?.addEventListener('click', () => {
+    applyFontSize(1);
+  });
+
+  // Botons de tema del lector
+  document.querySelectorAll('.theme-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const t = btn.getAttribute('data-set-theme');
+      if (t === 'paper') {
+        document.body.removeAttribute('data-theme');
+      } else {
+        document.body.setAttribute('data-theme', t);
+      }
+      localStorage.setItem('scriptum-theme', t);
+    });
+  });
+
+  // Barra de progrés de lectura al fer scroll
+  window.addEventListener('scroll', () => {
+    const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+    const bar = document.getElementById('reading-progress-bar');
+    if (bar) {
+      bar.style.width = scrolled + '%';
+    }
+  });
+</script>
+

@@ -1,0 +1,135 @@
+---
+const navLinks = [
+  { href: '/', label: 'Inici' },
+  { href: '/relats', label: 'Relats & Llibres' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/sobre-scriptum', label: 'L\'Autor' },
+  { href: '/contacte', label: 'Contacte' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-main)]/90 border-b border-[var(--border-color)] transition-colors">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
+    <!-- Logotip Scriptum -->
+    <a href="/" class="group flex items-center gap-2.5 text-decoration-none">
+      <span class="w-8 h-8 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center font-display font-bold text-lg shadow-sm transition-transform group-hover:scale-105">
+        S
+      </span>
+      <div class="flex flex-col">
+        <span class="font-display font-bold text-xl tracking-tight text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+          Scriptum
+        </span>
+        <span class="text-[10px] tracking-widest uppercase font-sans text-[var(--text-muted)] -mt-1">
+          Lletres & Cròniques
+        </span>
+      </div>
+    </a>
+
+    <!-- Navegació Desktop -->
+    <nav class="hidden md:flex items-center gap-6 text-sm font-sans font-medium">
+      {navLinks.map((link) => {
+        const isActive = link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href);
+        return (
+          <a
+            href={link.href}
+            class={`transition-colors py-1 ${
+              isActive
+                ? 'text-[var(--accent)] font-semibold border-b-2 border-[var(--accent)]'
+                : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+            }`}
+          >
+            {link.label}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Botons auxiliars: selector de tema ràpid -->
+    <div class="flex items-center gap-2">
+      <button
+        id="theme-toggle-btn"
+        type="button"
+        class="p-2 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--card-bg)] text-xs font-sans transition-all cursor-pointer flex items-center gap-1.5"
+        title="Canviar to de lectura (Paper, Sèpia, Nocturn)"
+        aria-label="Canviar tema"
+      >
+        <span id="theme-icon">📜</span>
+        <span id="theme-label" class="hidden sm:inline font-mono text-[11px]">Paper</span>
+      </button>
+
+      <!-- Botó Menú Mòbil -->
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="md:hidden p-2 rounded-lg border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+        aria-label="Obrir menú"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú Mòbil desplegable -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-[var(--border-color)] bg-[var(--card-bg)] px-4 py-3 space-y-2">
+    {navLinks.map((link) => (
+      <a
+        href={link.href}
+        class="block py-2 text-sm font-sans font-medium text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+</header>
+
+<script>
+  // Gestor del botó de menú mòbil
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  // Cicle de temes: paper -> sepia -> nocturn -> paper
+  const themes = [
+    { id: 'paper', icon: '📜', label: 'Paper' },
+    { id: 'sepia', icon: '☕', label: 'Sèpia' },
+    { id: 'nocturn', icon: '🌙', label: 'Nocturn' }
+  ];
+
+  function applyTheme(themeId) {
+    if (themeId === 'paper') {
+      document.body.removeAttribute('data-theme');
+    } else {
+      document.body.setAttribute('data-theme', themeId);
+    }
+    localStorage.setItem('scriptum-theme', themeId);
+    
+    const cur = themes.find(t => t.id === themeId) || themes[0];
+    const iconEl = document.getElementById('theme-icon');
+    const labelEl = document.getElementById('theme-label');
+    if (iconEl) iconEl.textContent = cur.icon;
+    if (labelEl) labelEl.textContent = cur.label;
+  }
+
+  // Inicialitzar tema
+  const saved = localStorage.getItem('scriptum-theme') || 'paper';
+  applyTheme(saved);
+
+  const toggleBtn = document.getElementById('theme-toggle-btn');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const current = localStorage.getItem('scriptum-theme') || 'paper';
+      const idx = themes.findIndex(t => t.id === current);
+      const next = themes[(idx + 1) % themes.length].id;
+      applyTheme(next);
+    });
+  }
+</script>
+

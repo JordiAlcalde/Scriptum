@@ -1,0 +1,53 @@
+---
+import ReaderLayout from '../../../../layouts/ReaderLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allRelats = await getCollection('relats');
+  const bookIds = Array.from(new Set(allRelats.map(r => r.data.llibreId)));
+
+  const paths = [];
+
+  for (const bId of bookIds) {
+    const chapters = allRelats
+      .filter(r => r.data.llibreId === bId)
+      .sort((a, b) => a.data.capitol - b.data.capitol);
+
+    chapters.forEach((cap, idx) => {
+      const capSlug = cap.slug.split('/').pop();
+      const prev = idx > 0 ? { title: chapters[idx - 1].data.title, slug: chapters[idx - 1].slug.split('/').pop() } : null;
+      const next = idx < chapters.length - 1 ? { title: chapters[idx + 1].data.title, slug: chapters[idx + 1].slug.split('/').pop() } : null;
+
+      paths.push({
+        params: { llibre: bId, capitol: capSlug },
+        props: {
+          chapter: cap,
+          prevChapter: prev,
+          nextChapter: next,
+          totalCapitols: chapters.length,
+        }
+      });
+    });
+  }
+
+  return paths;
+}
+
+const { chapter, prevChapter, nextChapter, totalCapitols } = Astro.props;
+const { Content } = await chapter.render();
+---
+
+<ReaderLayout
+  title={chapter.data.title}
+  llibre={chapter.data.llibre}
+  llibreId={chapter.data.llibreId}
+  capitol={chapter.data.capitol}
+  totalCapitols={totalCapitols}
+  sinopsi={chapter.data.sinopsi}
+  tempsLectura={chapter.data.tempsLectura}
+  prevChapter={prevChapter}
+  nextChapter={nextChapter}
+>
+  <Content />
+</ReaderLayout>
+

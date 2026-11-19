@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCard from '../../components/BookCard.astro';
+import { getCollection } from 'astro:content';
+
+const allRelats = await getCollection('relats');
+
+// Agrupar per llibre
+const booksMap = new Map();
+allRelats.forEach((cap) => {
+  const bId = cap.data.llibreId;
+  if (!booksMap.has(bId)) {
+    booksMap.set(bId, {
+      id: bId,
+      titol: cap.data.llibre,
+      sinopsi: cap.data.sinopsi || 'Una història teixida capítol a capítol.',
+      capitols: []
+    });
+  }
+  booksMap.get(bId).capitols.push(cap);
+});
+
+const booksList = Array.from(booksMap.values());
+---
+
+<BaseLayout title="Relats & Llibres | Scriptum" description="Totes les novel·les, sèries i relats organitzats per capítols a Scriptum.">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-10">
+    <header class="space-y-3 pb-8 border-b border-[var(--border-color)]">
+      <span class="text-xs uppercase font-mono tracking-widest text-[var(--accent)] font-semibold">
+        Biblioteca Digital
+      </span>
+      <h1 class="font-display font-bold text-3xl sm:text-5xl text-[var(--text-primary)]">
+        Relats & Llibres
+      </h1>
+      <p class="font-serif text-base text-[var(--text-muted)] max-w-2xl leading-relaxed">
+        Explora les obres publicades per capítols. Cadascuna compta amb un lector immersiu que s'adapta al teu ritme i comoditat visual.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 gap-6">
+      {booksList.map((book) => (
+        <BookCard
+          llibreId={book.id}
+          titol={book.titol}
+          sinopsi={book.sinopsi}
+          totalCapitols={book.capitols.length}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
