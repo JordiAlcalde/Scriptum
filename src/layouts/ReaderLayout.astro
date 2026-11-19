@@ -1,81 +1,122 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ReaderControls from '../components/ReaderControls.astro';
+import { isBlankPageType, type RelatTipus } from '../utils/books';
+
+interface NavTarget {
+  title: string;
+  slug: string;
+  label?: string;
+}
 
 interface Props {
   title: string;
   llibre: string;
   llibreId: string;
-  capitol: number;
-  totalCapitols?: number;
+  itemLabel: string;
+  tipus?: RelatTipus;
+  seccio?: string;
   sinopsi?: string;
   tempsLectura?: string;
-  prevChapter?: { title: string; slug: string } | null;
-  nextChapter?: { title: string; slug: string } | null;
+  prevChapter?: NavTarget | null;
+  nextChapter?: NavTarget | null;
 }
 
 const {
   title,
   llibre,
   llibreId,
-  capitol,
-  totalCapitols,
+  itemLabel,
+  tipus = 'capitol',
+  seccio,
   sinopsi,
-  tempsLectura = '5 min',
+  tempsLectura,
   prevChapter,
   nextChapter,
 } = Astro.props;
+
+const isBlank = isBlankPageType(tipus);
+const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epileg';
 ---
 
-<BaseLayout title={`${title} — Capítol ${capitol} de ${llibre} | Scriptum`} description={sinopsi}>
+<BaseLayout title={`${title} — ${llibre} | Scriptum`} description={sinopsi}>
   <!-- Barra Superior de Controls del Lector -->
-  <ReaderControls llibreTitol={llibre} capitolNum={capitol} totalCapitols={totalCapitols} />
+  <ReaderControls llibreTitol={llibre} llibreId={llibreId} itemLabel={itemLabel} />
 
   <!-- Espai de Lectura Editorial -->
   <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-    <!-- Capçalera del Capítol -->
-    <header class="text-center space-y-3 pb-10 border-b border-[var(--border-color)] mb-12">
-      <div class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold">
-        <a href={`/relats/${llibreId}`} class="hover:underline">
-          {llibre}
-        </a>
-        <span>·</span>
-        <span>Capítol {capitol}</span>
+    {isBlank ? (
+      <!-- Pàgina en blanc editorial: Dedicatòria o Epígraf / Frase aïllada -->
+      <div class="min-h-[52vh] flex flex-col items-center justify-center text-center py-12 sm:py-20 space-y-8">
+        <span class="text-xs font-mono uppercase tracking-[0.25em] text-[var(--text-muted)]">
+          {itemLabel}
+        </span>
+
+        <div class="prose-blank-page max-w-xl mx-auto">
+          <slot />
+        </div>
+
+        <div class="scene-break my-6 text-center">
+          <span>❦</span>
+        </div>
       </div>
+    ) : (
+      <>
+        <!-- Capçalera normal (Capítol, Episodi, Pròleg, Epíleg, Nota) -->
+        <header class="text-center space-y-3 pb-10 border-b border-[var(--border-color)] mb-12">
+          <div class="inline-flex items-center justify-center gap-2 flex-wrap text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold">
+            <a href={`/relats/${llibreId}`} class="hover:underline">
+              {llibre}
+            </a>
+            {seccio && (
+              <>
+                <span>·</span>
+                <span class="text-[var(--text-muted)]">{seccio}</span>
+              </>
+            )}
+            <span>·</span>
+            <span>{itemLabel}</span>
+          </div>
 
-      <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
-        {title}
-      </h1>
+          <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
+            {title}
+          </h1>
 
-      <div class="flex items-center justify-center gap-4 text-xs font-mono text-[var(--text-muted)] pt-2">
-        <span>⏱️ {tempsLectura} de lectura</span>
-      </div>
+          {tempsLectura && (
+            <div class="flex items-center justify-center gap-4 text-xs font-mono text-[var(--text-muted)] pt-2">
+              <span>⏱️ {tempsLectura} de lectura</span>
+            </div>
+          )}
 
-      {sinopsi && (
-        <p class="text-sm italic text-[var(--text-muted)] max-w-xl mx-auto pt-2 leading-relaxed">
-          «{sinopsi}»
-        </p>
-      )}
-    </header>
+          {sinopsi && (
+            <p class="text-sm italic text-[var(--text-muted)] max-w-xl mx-auto pt-2 leading-relaxed">
+              «{sinopsi}»
+            </p>
+          )}
+        </header>
 
-    <!-- Cos del Capítol (Renderitzat de Markdown amb estil literari) -->
-    <div class="prose-literaria drop-cap">
-      <slot />
-    </div>
+        <!-- Cos del text (Renderitzat de Markdown amb estil literari) -->
+        <div class={`prose-literaria ${useDropCap ? 'drop-cap' : ''}`}>
+          <slot />
+        </div>
 
-    <!-- Separador final de capítol -->
-    <div class="scene-break my-16 text-center">
-      <span>❦</span>
-    </div>
+        <!-- Separador final -->
+        <div class="scene-break my-16 text-center">
+          <span>❦</span>
+        </div>
+      </>
+    )}
 
-    <!-- Navegació entre capítols (Anterior / Següent) -->
+    <!-- Navegació entre pàgines (Anterior / Següent) -->
     <nav class="pt-8 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 font-sans text-xs">
       {prevChapter ? (
         <a
           href={`/relats/${llibreId}/${prevChapter.slug}`}
           class="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex flex-col gap-1 text-left group"
         >
-          <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">← Capítol anterior</span>
+          <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">
+            ← {prevChapter.label || 'Anterior'}
+          </span>
           <span class="font-display font-semibold text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
             {prevChapter.title}
           </span>
@@ -96,7 +137,9 @@ const {
           href={`/relats/${llibreId}/${nextChapter.slug}`}
           class="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex flex-col gap-1 text-right group"
         >
-          <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">Següent capítol →</span>
+          <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">
+            {nextChapter.label || 'Següent'} →
+          </span>
           <span class="font-display font-semibold text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
             {nextChapter.title}
           </span>
@@ -104,10 +147,9 @@ const {
       ) : (
         <div class="p-4 rounded-xl border border-[var(--border-color)]/50 bg-[var(--card-bg)]/30 text-right opacity-60">
           <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">Final de l'obra</span>
-          <span class="font-display font-semibold text-sm text-[var(--text-primary)] block">Últim capítol</span>
+          <span class="font-display font-semibold text-sm text-[var(--text-primary)] block">Fi</span>
         </div>
       )}
     </nav>
   </article>
 </BaseLayout>
-

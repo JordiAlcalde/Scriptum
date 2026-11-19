@@ -90,3 +90,33 @@
   background-color: var(--border-color);
 }
 
+/* Pàgina en blanc editorial (dedicatòria, epígraf / frase aïllada) */
+.prose-blank-page {
+  line-height: 1.9;
+  font-size: calc(var(--reading-font-size, 1.125rem) * 1.08);
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.prose-blank-page p {
+  margin-bottom: 1.25em;
+  text-align: center;
+}
+
+.prose-blank-page blockquote {
+  border-left: none;
+  padding-left: 0;
+  margin: 0 auto 1.25em;
+  font-style: italic;
+}
+
+/* Imatges dins dels textos */
+.prose-literaria img,
+.prose-blank-page img {
+  display: block;
+  margin: 2rem auto;
+  max-width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+

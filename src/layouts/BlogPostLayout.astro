@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { slugifyTag } from '../utils/tags';
 
 interface Props {
   title: string;
@@ -47,9 +48,12 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
       {tags.length > 0 && (
         <div class="flex items-center gap-2 pt-2 flex-wrap">
           {tags.map((tag) => (
-            <span class="text-xs font-mono px-2.5 py-0.5 rounded-md bg-[var(--border-color)]/60 text-[var(--text-muted)]">
+            <a
+              href={`/blog/etiqueta/${slugifyTag(tag)}`}
+              class="text-xs font-mono px-2.5 py-0.5 rounded-md bg-[var(--border-color)]/60 text-[var(--text-muted)] hover:bg-[var(--accent)]/15 hover:text-[var(--accent)] transition-colors"
+            >
               #{tag}
-            </span>
+            </a>
           ))}
         </div>
       )}

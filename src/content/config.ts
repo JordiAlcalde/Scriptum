@@ -19,15 +19,29 @@ const relatsCollection = defineCollection({
     title: z.string(),
     llibre: z.string(),
     llibreId: z.string(),
-    capitol: z.number(),
+    capitol: z.number().optional(),
+    ordre: z.number().optional(),
+    tipus: z
+      .enum(['capitol', 'dedicatoria', 'epigraf', 'proleg', 'epileg', 'nota'])
+      .default('capitol'),
+    seccio: z.string().optional(),
+    etiqueta: z.string().optional(),
     data: z.date(),
     sinopsi: z.string().optional(),
-    tempsLectura: z.string().default('5 min'),
+    tempsLectura: z.string().optional(),
+  }),
+});
+
+const etiquetesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string().optional(),
   }),
 });
 
 export const collections = {
   blog: blogCollection,
   relats: relatsCollection,
+  etiquetes: etiquetesCollection,
 };
 

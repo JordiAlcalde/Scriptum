@@ -1,27 +1,27 @@
 ---
 interface Props {
   llibreTitol?: string;
-  capitolNum?: number;
-  totalCapitols?: number;
+  llibreId?: string;
+  itemLabel?: string;
 }
 
-const { llibreTitol, capitolNum, totalCapitols } = Astro.props;
+const { llibreTitol, llibreId, itemLabel } = Astro.props;
 ---
 
 <div class="sticky top-18 z-30 py-3 backdrop-blur-md bg-[var(--bg-main)]/95 border-b border-[var(--border-color)] transition-colors">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4 text-xs font-sans">
     
-    <!-- Info del llibre / Capítol -->
+    <!-- Info del llibre / Peça -->
     <div class="flex items-center gap-2 truncate">
       {llibreTitol && (
-        <a href="/relats" class="text-[var(--text-muted)] hover:text-[var(--accent)] truncate transition-colors flex items-center gap-1 font-medium">
+        <a href={llibreId ? `/relats/${llibreId}` : '/relats'} class="text-[var(--text-muted)] hover:text-[var(--accent)] truncate transition-colors flex items-center gap-1 font-medium">
           <span>←</span>
           <span class="truncate">{llibreTitol}</span>
         </a>
       )}
-      {capitolNum && (
+      {itemLabel && (
         <span class="px-2 py-0.5 rounded bg-[var(--border-color)]/60 text-[var(--text-muted)] font-mono text-[11px] shrink-0">
-          Cap. {capitolNum} {totalCapitols ? `/ ${totalCapitols}` : ''}
+          {itemLabel}
         </span>
       )}
     </div>

@@ -1,12 +1,10 @@
 ---
 title: "Les meves filles"
-description: Una reflexió sobre la necessitat de recuperar espais de lectura assossegada en un món de presses digitals.
+description: Un retrat ràpid i sentit de les joies més preuades.
 pubDate: 2012-10-30
-author: Scriptum
+author: Jordi Alcalde
 tags:
-  - manifest
-  - lectura
-  - escriptura
+  - família
 featured: true
 ---
 

@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import TagFilterBar from '../../components/TagFilterBar.astro';
 import { getCollection } from 'astro:content';
+import { getBlogTags } from '../../utils/tags';
 
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const allTags = await getBlogTags(sortedPosts);
 ---
 
 <BaseLayout title="Blog & Apunts | Scriptum" description="Articles de reflexió, processos d'escriptura i pensament a Scriptum.">
@@ -20,6 +23,8 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
         Reflexions, assajos breus sobre literatura i el plaer de mirar el món a través de les paraules.
       </p>
     </header>
+
+    <TagFilterBar tags={allTags} totalPosts={sortedPosts.length} />
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {sortedPosts.map((post) => (

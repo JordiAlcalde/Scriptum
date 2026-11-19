@@ -1,31 +1,42 @@
 ---
 import ReaderLayout from '../../../layouts/ReaderLayout.astro';
 import { getCollection } from 'astro:content';
+import { getItemLabel, getItemSlug, sortBookItems } from '../../../utils/books';
 
 export async function getStaticPaths() {
   const allRelats = await getCollection('relats');
-  const bookIds = Array.from(new Set(allRelats.map(r => r.data.llibreId)));
+  const bookIds = Array.from(new Set(allRelats.map((r) => r.data.llibreId)));
 
   const paths = [];
 
   for (const bId of bookIds) {
-    const chapters = allRelats
-      .filter(r => r.data.llibreId === bId)
-      .sort((a, b) => a.data.capitol - b.data.capitol);
+    const items = sortBookItems(allRelats.filter((r) => r.data.llibreId === bId));
 
-    chapters.forEach((cap, idx) => {
-      const capSlug = cap.slug.split('/').pop();
-      const prev = idx > 0 ? { title: chapters[idx - 1].data.title, slug: chapters[idx - 1].slug.split('/').pop() } : null;
-      const next = idx < chapters.length - 1 ? { title: chapters[idx + 1].data.title, slug: chapters[idx + 1].slug.split('/').pop() } : null;
+    items.forEach((item, idx) => {
+      const itemSlug = getItemSlug(item);
+      const prevItem = idx > 0 ? items[idx - 1] : null;
+      const nextItem = idx < items.length - 1 ? items[idx + 1] : null;
 
       paths.push({
-        params: { llibre: bId, capitol: capSlug },
+        params: { llibre: bId, capitol: itemSlug },
         props: {
-          chapter: cap,
-          prevChapter: prev,
-          nextChapter: next,
-          totalCapitols: chapters.length,
-        }
+          chapter: item,
+          itemLabel: getItemLabel(item),
+          prevChapter: prevItem
+            ? {
+                title: prevItem.data.title,
+                slug: getItemSlug(prevItem),
+                label: getItemLabel(prevItem),
+              }
+            : null,
+          nextChapter: nextItem
+            ? {
+                title: nextItem.data.title,
+                slug: getItemSlug(nextItem),
+                label: getItemLabel(nextItem),
+              }
+            : null,
+        },
       });
     });
   }
@@ -33,7 +44,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { chapter, prevChapter, nextChapter, totalCapitols } = Astro.props;
+const { chapter, itemLabel, prevChapter, nextChapter } = Astro.props;
 const { Content } = await chapter.render();
 ---
 
@@ -41,8 +52,9 @@ const { Content } = await chapter.render();
   title={chapter.data.title}
   llibre={chapter.data.llibre}
   llibreId={chapter.data.llibreId}
-  capitol={chapter.data.capitol}
-  totalCapitols={totalCapitols}
+  itemLabel={itemLabel}
+  tipus={chapter.data.tipus}
+  seccio={chapter.data.seccio}
   sinopsi={chapter.data.sinopsi}
   tempsLectura={chapter.data.tempsLectura}
   prevChapter={prevChapter}
@@ -50,4 +62,3 @@ const { Content } = await chapter.render();
 >
   <Content />
 </ReaderLayout>
-

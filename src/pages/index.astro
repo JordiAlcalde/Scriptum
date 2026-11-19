@@ -3,27 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import BookCard from '../components/BookCard.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
+import { groupBooks } from '../utils/books';
 
 // Obtenir relats i agrupar per llibre
 const allRelats = await getCollection('relats');
 const allPosts = await getCollection('blog');
 
-// Agrupació de relats per llibre
-const booksMap = new Map();
-allRelats.forEach((cap) => {
-  const bId = cap.data.llibreId;
-  if (!booksMap.has(bId)) {
-    booksMap.set(bId, {
-      id: bId,
-      titol: cap.data.llibre,
-      sinopsi: cap.data.sinopsi || 'Una història teixida capítol a capítol.',
-      capitols: []
-    });
-  }
-  booksMap.get(bId).capitols.push(cap);
-});
-
-const booksList = Array.from(booksMap.values());
+const booksList = groupBooks(allRelats);
 const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
 
@@ -70,7 +56,7 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
           Literatura per lliuraments
         </span>
         <h2 class="font-display font-bold text-2xl sm:text-3xl text-[var(--text-primary)] mt-1">
-          Obres & Relats
+          Llibres i relats
         </h2>
       </div>
 
@@ -86,7 +72,9 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
           llibreId={book.id}
           titol={book.titol}
           sinopsi={book.sinopsi}
-          totalCapitols={book.capitols.length}
+          totalCapitols={book.readingCount}
+          countLabel={book.countLabel}
+          firstSlug={book.firstSlug}
         />
       ))}
     </div>

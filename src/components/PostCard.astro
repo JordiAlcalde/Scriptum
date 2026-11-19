@@ -1,4 +1,6 @@
 ---
+import { slugifyTag } from '../utils/tags';
+
 interface Props {
   slug: string;
   title: string;
@@ -38,9 +40,12 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2">
     <div class="flex items-center gap-1.5 flex-wrap">
       {tags.map((tag) => (
-        <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[var(--border-color)]/50 text-[var(--text-muted)]">
+        <a
+          href={`/blog/etiqueta/${slugifyTag(tag)}`}
+          class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[var(--border-color)]/50 text-[var(--text-muted)] hover:bg-[var(--accent)]/15 hover:text-[var(--accent)] transition-colors"
+        >
           #{tag}
-        </span>
+        </a>
       ))}
     </div>
 
