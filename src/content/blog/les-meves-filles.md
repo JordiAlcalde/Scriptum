@@ -5,6 +5,7 @@ pubDate: 2012-10-30
 author: Jordi Alcalde
 tags:
   - família
+  - gent
 featured: true
 ---
 

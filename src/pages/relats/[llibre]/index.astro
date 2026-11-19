@@ -22,11 +22,12 @@ export async function getStaticPaths() {
       chapters: book.items,
       firstSlug: book.firstSlug,
       countLabel: book.countLabel,
+      estat: book.estat,
     },
   }));
 }
 
-const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel } = Astro.props;
+const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat } = Astro.props;
 const sectionBlocks = groupItemsBySection(chapters);
 const hasSections = sectionBlocks.some((b) => b.seccio !== null);
 ---
@@ -49,9 +50,13 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
       </div>
 
       <div class="flex-1 space-y-4">
-        <span class="text-xs font-mono uppercase tracking-widest text-[var(--accent)] font-semibold">
-          Llibre / Relat
-        </span>
+        <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest font-semibold flex-wrap">
+          <span class="text-[var(--accent)]">Llibre / Relat</span>
+          <span class="text-[var(--text-muted)]">·</span>
+          <span class={estat === 'acabat' ? 'text-emerald-700' : 'text-[var(--text-muted)]'}>
+            {estat === 'acabat' ? '✓ Obra completa' : '📖 Obra en curs'}
+          </span>
+        </div>
         <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)]">
           {llibreTitol}
         </h1>

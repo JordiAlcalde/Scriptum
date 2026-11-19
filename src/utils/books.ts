@@ -2,6 +2,7 @@ import type { CollectionEntry } from 'astro:content';
 
 export type RelatEntry = CollectionEntry<'relats'>;
 export type RelatTipus = RelatEntry['data']['tipus'];
+export type BookStatus = 'en-curs' | 'acabat';
 
 export interface BookGroup {
   id: string;
@@ -11,6 +12,7 @@ export interface BookGroup {
   firstSlug: string;
   readingCount: number;
   countLabel: string;
+  estat: BookStatus;
 }
 
 export interface BookSectionBlock {
@@ -99,6 +101,13 @@ export function groupItemsBySection(sortedItems: RelatEntry[]): BookSectionBlock
 }
 
 /**
+ * Determina si un llibre està acabat (si almenys un dels seus fitxers té `estat: "acabat"`).
+ */
+export function getBookStatus(items: RelatEntry[]): BookStatus {
+  return items.some((i) => i.data.estat === 'acabat') ? 'acabat' : 'en-curs';
+}
+
+/**
  * Agrupa tota la col·lecció `relats` per llibre, amb ordre, primer slug i comptador intel·ligent.
  */
 export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
@@ -136,6 +145,7 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
       firstSlug,
       readingCount,
       countLabel: `${readingCount} ${unit}`,
+      estat: getBookStatus(items),
     };
   });
 }

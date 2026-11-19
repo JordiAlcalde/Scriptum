@@ -27,3 +27,6 @@ Històries, records i reflexions al voltant dels vincles familiars i les persone
 
 ## sentiments
 Apunts íntims sobre emocions, vivències personals i la manera com ens toca la vida.
+
+## gent
+Relacions personals, conèixer com som i com són.

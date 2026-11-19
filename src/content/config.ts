@@ -26,6 +26,7 @@ const relatsCollection = defineCollection({
       .default('capitol'),
     seccio: z.string().optional(),
     etiqueta: z.string().optional(),
+    estat: z.enum(['en-curs', 'acabat']).optional(),
     data: z.date(),
     sinopsi: z.string().optional(),
     tempsLectura: z.string().optional(),

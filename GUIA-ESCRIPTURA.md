@@ -67,6 +67,7 @@ Tots els fitxers `.md` d'aquell llibre han de tenir **exactament el mateix `llib
 | `tipus` | Opcional | Aspecte de la pàgina: `capitol` (per defecte), `dedicatoria`, `epigraf`, `proleg`, `epileg`, `nota` |
 | `seccio` | Opcional | Agrupa diversos episodis sota un encapçalament a l'índex (ex. `"Capítol I — El viatge"`) |
 | `etiqueta` | Opcional | Subtítol personalitzat (ex. `"Episodi 1"`, `"Interludi"`). Si no el poses, s'assigna sol segons `tipus`/`capitol` |
+| `estat` | Opcional | `"en-curs"` (per defecte) o `"acabat"`. N'hi ha prou de posar `estat: "acabat"` en un sol fitxer del llibre per marcar-lo com a **Obra completa** |
 | `sinopsi` | Opcional | Resum curt (la primera sinopsi del llibre es fa servir com a descripció del llibre) |
 | `tempsLectura` | Opcional | Temps estimat (ex. `"5 min"`). Si no el poses, no es mostra |
 

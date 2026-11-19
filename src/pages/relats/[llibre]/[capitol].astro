@@ -1,7 +1,7 @@
 ---
 import ReaderLayout from '../../../layouts/ReaderLayout.astro';
 import { getCollection } from 'astro:content';
-import { getItemLabel, getItemSlug, sortBookItems } from '../../../utils/books';
+import { getBookStatus, getItemLabel, getItemSlug, sortBookItems } from '../../../utils/books';
 
 export async function getStaticPaths() {
   const allRelats = await getCollection('relats');
@@ -11,6 +11,7 @@ export async function getStaticPaths() {
 
   for (const bId of bookIds) {
     const items = sortBookItems(allRelats.filter((r) => r.data.llibreId === bId));
+    const bookStatus = getBookStatus(items);
 
     items.forEach((item, idx) => {
       const itemSlug = getItemSlug(item);
@@ -22,6 +23,7 @@ export async function getStaticPaths() {
         props: {
           chapter: item,
           itemLabel: getItemLabel(item),
+          bookStatus,
           prevChapter: prevItem
             ? {
                 title: prevItem.data.title,
@@ -44,7 +46,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { chapter, itemLabel, prevChapter, nextChapter } = Astro.props;
+const { chapter, itemLabel, bookStatus, prevChapter, nextChapter } = Astro.props;
 const { Content } = await chapter.render();
 ---
 
@@ -57,6 +59,7 @@ const { Content } = await chapter.render();
   seccio={chapter.data.seccio}
   sinopsi={chapter.data.sinopsi}
   tempsLectura={chapter.data.tempsLectura}
+  bookStatus={bookStatus}
   prevChapter={prevChapter}
   nextChapter={nextChapter}
 >

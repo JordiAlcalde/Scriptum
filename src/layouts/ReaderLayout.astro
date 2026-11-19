@@ -1,7 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ReaderControls from '../components/ReaderControls.astro';
-import { isBlankPageType, type RelatTipus } from '../utils/books';
+import { isBlankPageType, type BookStatus, type RelatTipus } from '../utils/books';
 
 interface NavTarget {
   title: string;
@@ -18,6 +18,7 @@ interface Props {
   seccio?: string;
   sinopsi?: string;
   tempsLectura?: string;
+  bookStatus?: BookStatus;
   prevChapter?: NavTarget | null;
   nextChapter?: NavTarget | null;
 }
@@ -31,6 +32,7 @@ const {
   seccio,
   sinopsi,
   tempsLectura,
+  bookStatus = 'en-curs',
   prevChapter,
   nextChapter,
 } = Astro.props;
@@ -145,9 +147,13 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
           </span>
         </a>
       ) : (
-        <div class="p-4 rounded-xl border border-[var(--border-color)]/50 bg-[var(--card-bg)]/30 text-right opacity-60">
-          <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">Final de l'obra</span>
-          <span class="font-display font-semibold text-sm text-[var(--text-primary)] block">Fi</span>
+        <div class="p-4 rounded-xl border border-[var(--border-color)]/50 bg-[var(--card-bg)]/30 text-right opacity-70">
+          <span class="text-[10px] uppercase font-mono text-[var(--text-muted)]">
+            {bookStatus === 'acabat' ? "Final de l'obra" : 'Fins aquí publicat'}
+          </span>
+          <span class="font-display font-semibold text-sm text-[var(--text-primary)] block">
+            {bookStatus === 'acabat' ? 'Fi' : 'Continuarà…'}
+          </span>
         </div>
       )}
     </nav>
