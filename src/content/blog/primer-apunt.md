@@ -1,9 +1,12 @@
 ---
 title: "Benvinguts a Scriptum: El perquè d'aquest refugi"
-description: "Una reflexió sobre la necessitat de recuperar espais de lectura assossegada en un món de presses digitals."
+description: Una reflexió sobre la necessitat de recuperar espais de lectura assossegada en un món de presses digitals.
 pubDate: 2026-11-18
-author: "Scriptum"
-tags: ["manifest", "lectura", "escriptura"]
+author: Scriptum
+tags:
+  - manifest
+  - lectura
+  - escriptura
 featured: true
 ---
 
