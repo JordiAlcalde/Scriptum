@@ -111,6 +111,12 @@
 }
 
 /* Imatges dins dels textos */
+.prose-literaria::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .prose-literaria img,
 .prose-blank-page img {
   display: block;
@@ -118,5 +124,18 @@
   max-width: 100%;
   border-radius: 0.75rem;
   border: 1px solid var(--border-color);
+}
+
+/* Imatges amb text al voltant (en mòbil queden centrades; en pantalla mitjana/gran floten) */
+@media (min-width: 640px) {
+  .prose-literaria img.img-esquerra {
+    float: left;
+    margin: 0.35rem 1.75rem 1rem 0;
+  }
+
+  .prose-literaria img.img-dreta {
+    float: right;
+    margin: 0.35rem 0 1rem 1.75rem;
+  }
 }
 
