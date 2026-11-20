@@ -4,6 +4,7 @@ import BookCard from '../components/BookCard.astro';
 import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 import { groupBooks } from '../utils/books';
+import { estimateReadingTime } from '../utils/readingTime';
 
 // Obtenir relats i agrupar per llibre
 const allRelats = await getCollection('relats');
@@ -109,6 +110,7 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
           pubDate={post.data.pubDate}
           tags={post.data.tags}
           image={post.data.image}
+          readingTime={estimateReadingTime(post.body)}
         />
       ))}
     </div>

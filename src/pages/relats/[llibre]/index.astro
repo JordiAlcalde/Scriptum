@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import {
   getItemLabel,
+  getItemReadingTime,
   getItemSlug,
   groupBooks,
   groupItemsBySection,
@@ -123,6 +124,7 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                 const itemSlug = getItemSlug(item);
                 const label = getItemLabel(item);
                 const isBlank = isBlankPageType(item.data.tipus);
+                const readingTime = getItemReadingTime(item);
 
                 return isBlank ? (
                   <a
@@ -158,10 +160,10 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                     <div class="space-y-1">
                       <div class="flex items-center gap-2 text-xs font-mono text-[var(--accent)] flex-wrap">
                         <span>{label}</span>
-                        {item.data.tempsLectura && (
+                        {readingTime && (
                           <>
                             <span>·</span>
-                            <span class="text-[var(--text-muted)]">{item.data.tempsLectura}</span>
+                            <span class="text-[var(--text-muted)]">{readingTime}</span>
                           </>
                         )}
                         <span data-bookmark-badge class="hidden text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] font-semibold">

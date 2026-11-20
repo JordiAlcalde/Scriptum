@@ -1,4 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
+import { estimateReadingTime } from './readingTime';
 
 export type RelatEntry = CollectionEntry<'relats'>;
 export type RelatTipus = RelatEntry['data']['tipus'];
@@ -47,6 +48,18 @@ export function sortBookItems(items: RelatEntry[]): RelatEntry[] {
  */
 export function isBlankPageType(tipus?: RelatTipus): boolean {
   return tipus === 'dedicatoria' || tipus === 'epigraf';
+}
+
+/**
+ * Retorna el temps de lectura d'una peça d'un llibre:
+ * - Si és dedicatòria o epígraf: no en mostra.
+ * - Si l'autor l'ha indicat manualment (`tempsLectura`): el respecta.
+ * - Altrament: el calcula automàticament a partir del text.
+ */
+export function getItemReadingTime(item: RelatEntry): string | undefined {
+  if (isBlankPageType(item.data.tipus)) return undefined;
+  if (item.data.tempsLectura?.trim()) return item.data.tempsLectura.trim();
+  return estimateReadingTime(item.body);
 }
 
 /**

@@ -1,7 +1,7 @@
 ---
 import ReaderLayout from '../../../layouts/ReaderLayout.astro';
 import { getCollection } from 'astro:content';
-import { getBookStatus, getItemLabel, getItemSlug, sortBookItems } from '../../../utils/books';
+import { getBookStatus, getItemLabel, getItemReadingTime, getItemSlug, sortBookItems } from '../../../utils/books';
 
 export async function getStaticPaths() {
   const allRelats = await getCollection('relats');
@@ -60,7 +60,7 @@ const { Content } = await chapter.render();
   tipus={chapter.data.tipus}
   seccio={chapter.data.seccio}
   sinopsi={chapter.data.sinopsi}
-  tempsLectura={chapter.data.tempsLectura}
+  tempsLectura={getItemReadingTime(chapter)}
   bookStatus={bookStatus}
   prevChapter={prevChapter}
   nextChapter={nextChapter}

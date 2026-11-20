@@ -1,12 +1,11 @@
 ---
-title: "I"
-llibre: "Pels segles dels segles"
+title: "Començant a recordar"
+llibre: "Pels segles dels segles, amén"
 llibreId: "Pels-segles-dels-segles"
 capitol: 1
 data: 2016-08-01
-sinopsi: "Començant a recordar"
+sinopsi: "Una peculiar mirada retrospectiva als meus 10 anys, allà pel 1968, sota l'óptica de les sotanes."
 portada: "/imatges/segles_01.jpg"
-tempsLectura: "2 min"
 ---
 
 No és que hi pensi gaire a sovint, ben al contrari, molt de tarda en tarda i potser només durant alguna sobretaula d'aquelles que s'allarguen i tothom diu la seva. Van sortint tota mena d'anècdotes les quals, pels que ja tenim una edat i n'hem viscut més quantitat per simple matemàtica, han passat a ser batalletes. Per les mateixes raons m'he guanyat el dret a repetir-les malgrat que tots els de casa les hagin sentit un miler de cops i, per estrany que sembli, a vegades volen tornar-ne a escoltar alguna d'elles. Només esperen la frase en qüestió, el punt del relat que els fa riure, però qui ho va viure ho féu envoltat de fets i de circumstàncies que farien tot plegat més entenedor. Això no els interessa tant i no m'ho deixen explicar de tant com ho allargo, em faig pesat, ho sé. A la que passin uns pocs anys més n'estaran tips fins i tot de la versió abreviada i em faran callar o fugiran esperitats, ja m'ho imagino. I el pitjor serà quan en recordi de la missa la mitat, mai més ben dit.

@@ -73,7 +73,7 @@ Tots els fitxers `.md` d'aquell llibre han de tenir **exactament el mateix `llib
 | `estat` | Opcional | `"en-curs"` (per defecte) o `"acabat"`. N'hi ha prou de posar `estat: "acabat"` en un sol fitxer del llibre per marcar-lo com a **Obra completa** |
 | `portada` | Opcional | Ruta de la portada del llibre (ex. `"/imatges/portada-llibre.jpg"`). N'hi ha prou de posar-ho en un sol fitxer del llibre (recomanat format vertical 2:3 o 3:4) |
 | `sinopsi` | Opcional | Resum curt (la primera sinopsi del llibre es fa servir com a descripció del llibre) |
-| `tempsLectura` | Opcional | Temps estimat (ex. `"5 min"`). Si no el poses, no es mostra |
+| `tempsLectura` | Opcional | Es calcula **automàticament** (~200 paraules/minut) tant al blog com als llibres. Només cal posar-lo si vols forçar un valor manual |
 
 ---
 
@@ -222,16 +222,20 @@ Desa sempre les imatges dins de `c:\Antigravity\Scriptum\public\imatges\` (sense
 ```
 
 ### Imatge amb el text al voltant (esquerra o dreta)
-Posa aquesta línia **just abans del paràgraf** que vols que envolti la imatge:
+Posa aquesta línia abans del paràgraf que vols que envolti la imatge, **deixant sempre una línia en blanc entre la imatge i el paràgraf** (si no hi ha línia en blanc, Markdown tracta el paràgraf com a HTML i no aplica cursives ni marges):
 
 - **Imatge a l'esquerra, text a la dreta:**
 ```html
 <img src="/imatges/foto.jpg" alt="Descripció de la imatge" width="280" class="img-esquerra" />
+
+Aquí comença el paràgraf que envoltarà la imatge...
 ```
 
 - **Imatge a la dreta, text a l'esquerra:**
 ```html
 <img src="/imatges/foto.jpg" alt="Descripció de la imatge" width="280" class="img-dreta" />
+
+Aquí comença el paràgraf que envoltarà la imatge...
 ```
 
 *(En ordinador i tauleta el text envolta la imatge amb marge net; en mòbil es centra automàticament perquè el text no quedi massa estret.)*

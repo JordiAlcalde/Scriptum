@@ -4,6 +4,7 @@ import PostCard from '../../../components/PostCard.astro';
 import TagFilterBar from '../../../components/TagFilterBar.astro';
 import { getCollection } from 'astro:content';
 import { getBlogTags, slugifyTag, type TagInfo } from '../../../utils/tags';
+import { estimateReadingTime } from '../../../utils/readingTime';
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
@@ -81,6 +82,7 @@ const { tagInfo, posts, allTags, totalPosts } = Astro.props;
           pubDate={post.data.pubDate}
           tags={post.data.tags}
           image={post.data.image}
+          readingTime={estimateReadingTime(post.body)}
         />
       ))}
     </div>

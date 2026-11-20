@@ -4,6 +4,7 @@ import PostCard from '../../components/PostCard.astro';
 import TagFilterBar from '../../components/TagFilterBar.astro';
 import { getCollection } from 'astro:content';
 import { getBlogTags } from '../../utils/tags';
+import { estimateReadingTime } from '../../utils/readingTime';
 
 const allPosts = await getCollection('blog');
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -35,6 +36,7 @@ const allTags = await getBlogTags(sortedPosts);
           pubDate={post.data.pubDate}
           tags={post.data.tags}
           image={post.data.image}
+          readingTime={estimateReadingTime(post.body)}
         />
       ))}
     </div>

@@ -1,11 +1,10 @@
 ---
-title: "II"
-llibre: "Pels segles dels segles"
+title: "El viatge en Metro"
+llibre: "Pels segles dels segles, amén"
 llibreId: "Pels-segles-dels-segles"
 capitol: 2
 data: 2016-08-02
-sinopsi: "El viatge en Metro"
-tempsLectura: "2 min"
+sinopsi: ""
 ---
 
 Doncs vet aquí que el següent diumenge d'un mes que no recordo de l'any mil nou-cents seixanta-sis - posem-hi per cas - els dos cosins agafen el Metro i cap a Barcelona s'ha dit. Eren aquells temps en que uns marrecs de pocs anys podien anar en transport públic sense por que els hi passés res dolent i, a més, sense mòbil per anar retransmetent als pares les parades per les que passaven. Aquells vagons de Metro m'agradaven molt, jo els veia descomunals i m'encantava especialment si tocava un dels més antics, que tenia els seients fets d'uns barrots de fusta lluents i arrodonits de tants culs com s'hi havien assegut. 
