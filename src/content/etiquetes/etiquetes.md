@@ -36,3 +36,6 @@ Cosses que passen, curiositats.
 
 ## pensaments
 Tot allò que va passant pel cap
+
+## animals
+Relacionat amb el món animal

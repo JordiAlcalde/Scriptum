@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import ShareButton from '../components/ShareButton.astro';
 import { slugifyTag } from '../utils/tags';
 
 interface Props {
@@ -72,8 +73,14 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
       <div
         id="blog-read-tracker"
         data-post-slug={slug}
-        class="mb-8 flex items-center justify-end text-xs font-sans"
+        class="mb-8 flex flex-wrap items-center justify-between gap-3 text-xs font-sans"
       >
+        <ShareButton
+          title={`${title} | Scriptum`}
+          text={description}
+          label="Compartir article"
+        />
+
         <button
           id="btn-toggle-post-read"
           type="button"

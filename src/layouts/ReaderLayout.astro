@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import ReaderControls from '../components/ReaderControls.astro';
+import ShareButton from '../components/ShareButton.astro';
 import { isBlankPageType, type BookStatus, type RelatTipus } from '../utils/books';
 
 interface NavTarget {
@@ -125,14 +126,23 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
         <span>Punt de llibre desat en aquesta pàgina</span>
       </span>
 
-      <button
-        id="btn-toggle-chapter-read"
-        type="button"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-main)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium transition-all cursor-pointer"
-      >
-        <span id="chapter-read-icon">○</span>
-        <span id="chapter-read-text">Marcar com a llegit</span>
-      </button>
+      <div class="flex items-center gap-2 flex-wrap">
+        <ShareButton
+          title={`${title} — ${llibre} | Scriptum`}
+          text={sinopsi || `${llibre} (${itemLabel})`}
+          label="Compartir"
+          className="bg-[var(--bg-main)]"
+        />
+
+        <button
+          id="btn-toggle-chapter-read"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-main)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium transition-all cursor-pointer"
+        >
+          <span id="chapter-read-icon">○</span>
+          <span id="chapter-read-text">Marcar com a llegit</span>
+        </button>
+      </div>
     </div>
 
     <!-- Navegació entre pàgines (Anterior / Següent) -->

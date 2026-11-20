@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ShareButton from '../../../components/ShareButton.astro';
 import { getCollection } from 'astro:content';
 import {
   getItemLabel,
@@ -92,6 +93,12 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
               <span id="book-index-cta-icon">📖</span>
             </a>
           )}
+          <ShareButton
+            title={`${llibreTitol} | Scriptum`}
+            text={sinopsi}
+            label="Compartir obra"
+            className="px-4 py-3 rounded-xl"
+          />
           <span
             id="book-index-progress"
             class="hidden text-xs font-mono text-[var(--text-muted)] px-3 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)]"

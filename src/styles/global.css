@@ -139,3 +139,26 @@
   }
 }
 
+/* Amagar la barra i globus intrusius de Google Translate */
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+iframe.skiptranslate,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+font[style] {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+

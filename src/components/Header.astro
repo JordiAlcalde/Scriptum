@@ -13,7 +13,7 @@ const currentPath = Astro.url.pathname;
 <header class="sticky top-0 z-40 backdrop-blur-md bg-[var(--bg-main)]/90 border-b border-[var(--border-color)] transition-colors">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
     <!-- Logotip Scriptum -->
-    <a href="/" class="group flex items-center gap-2.5 text-decoration-none">
+    <a href="/" class="notranslate group flex items-center gap-2.5 text-decoration-none">
       <span class="w-8 h-8 rounded-lg bg-[var(--accent)] text-white flex items-center justify-center font-display font-bold text-lg shadow-sm transition-transform group-hover:scale-105">
         S
       </span>
@@ -46,8 +46,43 @@ const currentPath = Astro.url.pathname;
       })}
     </nav>
 
-    <!-- Botons auxiliars: selector de tema ràpid -->
+    <!-- Botons auxiliars: selector d'idioma i tema ràpid -->
     <div class="flex items-center gap-2">
+      <!-- Selector d'idioma CA / ES / EN -->
+      <div
+        id="lang-selector"
+        class="notranslate flex items-center border border-[var(--border-color)] rounded-lg overflow-hidden bg-[var(--card-bg)] text-[11px] font-mono"
+        role="group"
+        aria-label="Selector d'idioma"
+      >
+        <button
+          type="button"
+          data-lang="ca"
+          class="lang-btn px-2 py-1.5 transition-colors cursor-pointer font-semibold bg-[var(--accent)] text-white"
+          title="Català (idioma original)"
+        >
+          CA
+        </button>
+        <span class="w-[1px] h-4 bg-[var(--border-color)]"></span>
+        <button
+          type="button"
+          data-lang="es"
+          class="lang-btn px-2 py-1.5 transition-colors cursor-pointer text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+          title="Traducir al español"
+        >
+          ES
+        </button>
+        <span class="w-[1px] h-4 bg-[var(--border-color)]"></span>
+        <button
+          type="button"
+          data-lang="en"
+          class="lang-btn px-2 py-1.5 transition-colors cursor-pointer text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+          title="Translate to English"
+        >
+          EN
+        </button>
+      </div>
+
       <button
         id="theme-toggle-btn"
         type="button"
@@ -84,7 +119,48 @@ const currentPath = Astro.url.pathname;
       </a>
     ))}
   </div>
+  <!-- Contenidor ocult de Google Translate -->
+  <div id="google_translate_element" class="hidden" aria-hidden="true"></div>
 </header>
+
+<!-- Finestra flotant d'avís de traducció automàtica -->
+<div
+  id="translate-notice-modal"
+  class="notranslate fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-xs p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="translate-notice-title"
+>
+  <div class="max-w-md w-full rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] p-6 sm:p-7 shadow-xl space-y-4">
+    <div class="flex items-center gap-2.5">
+      <span class="w-8 h-8 rounded-lg bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center text-base">
+        🌐
+      </span>
+      <h3 id="translate-notice-title" class="font-display font-bold text-lg text-[var(--text-primary)]">
+        Aviso de traducción automática
+      </h3>
+    </div>
+
+    <p id="translate-notice-body" class="font-serif text-sm text-[var(--text-primary)] leading-relaxed"></p>
+
+    <div class="pt-2 flex items-center justify-end gap-2.5 font-sans text-xs">
+      <button
+        id="translate-notice-cancel"
+        type="button"
+        class="px-4 py-2 rounded-xl border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-main)] transition-colors cursor-pointer"
+      >
+        Cancelar
+      </button>
+      <button
+        id="translate-notice-confirm"
+        type="button"
+        class="px-4 py-2 rounded-xl bg-[var(--accent)] text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+      >
+        Entendido
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
   // Gestor del botó de menú mòbil
@@ -131,5 +207,168 @@ const currentPath = Astro.url.pathname;
       applyTheme(next);
     });
   }
+
+  // --- Traducció automàtica opcional (CA / ES / EN) amb Google Translate ---
+  const TRANSLATE_MESSAGES: Record<'es' | 'en', { title: string; body: string; confirm: string; cancel: string }> = {
+    es: {
+      title: 'Traducción automática al español',
+      body: 'El contenido de los artículos y relatos será traducido al español de manera automática. Es posible que la traducción no exprese exactamente la intención o el significado escritos en el idioma original.',
+      confirm: 'Continuar en español',
+      cancel: 'Mantener en catalán',
+    },
+    en: {
+      title: 'Automatic English translation',
+      body: 'The content of the articles and stories will be automatically translated into English. The translation may not precisely convey the intent or meaning expressed in the original language.',
+      confirm: 'Continue in English',
+      cancel: 'Keep in Catalan',
+    },
+  };
+
+  function getActiveLang(): 'ca' | 'es' | 'en' {
+    const match = document.cookie.match(/(?:^|;\s*)googtrans=\/ca\/(es|en)(?:;|$)/);
+    if (match && (match[1] === 'es' || match[1] === 'en')) {
+      return match[1];
+    }
+    return 'ca';
+  }
+
+  function setGoogTransCookie(lang: 'ca' | 'es' | 'en') {
+    const hostname = window.location.hostname;
+    if (lang === 'ca') {
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname};`;
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${hostname};`;
+    } else {
+      const value = `/ca/${lang}`;
+      document.cookie = `googtrans=${value}; path=/;`;
+      if (hostname.includes('.')) {
+        document.cookie = `googtrans=${value}; path=/; domain=${hostname};`;
+      }
+    }
+  }
+
+  function updateLangButtons(active: 'ca' | 'es' | 'en') {
+    document.querySelectorAll<HTMLButtonElement>('.lang-btn').forEach((btn) => {
+      const isCurrent = btn.dataset.lang === active;
+      if (isCurrent) {
+        btn.classList.add('bg-[var(--accent)]', 'text-white', 'font-semibold');
+        btn.classList.remove('text-[var(--text-muted)]');
+      } else {
+        btn.classList.remove('bg-[var(--accent)]', 'text-white', 'font-semibold');
+        btn.classList.add('text-[var(--text-muted)]');
+      }
+    });
+  }
+
+  let gtLoaded = false;
+  function loadGoogleTranslate() {
+    if (gtLoaded) return;
+    gtLoaded = true;
+
+    (window as any).googleTranslateElementInit = function () {
+      if ((window as any).google?.translate?.TranslateElement) {
+        new (window as any).google.translate.TranslateElement(
+          {
+            pageLanguage: 'ca',
+            includedLanguages: 'es,en',
+            autoDisplay: false,
+          },
+          'google_translate_element'
+        );
+      }
+    };
+
+    const script = document.createElement('script');
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    script.async = true;
+    document.body.appendChild(script);
+  }
+
+  function applyLanguage(lang: 'ca' | 'es' | 'en') {
+    setGoogTransCookie(lang);
+    updateLangButtons(lang);
+
+    if (lang === 'ca') {
+      window.location.reload();
+      return;
+    }
+
+    const combo = document.querySelector<HTMLSelectElement>('.goog-te-combo');
+    if (combo) {
+      combo.value = lang;
+      combo.dispatchEvent(new Event('change'));
+    } else {
+      loadGoogleTranslate();
+      // Si la cookie s'acaba d'establir abans de carregar el script, recarreguem si en 900ms no ha traduït
+      setTimeout(() => {
+        const readyCombo = document.querySelector<HTMLSelectElement>('.goog-te-combo');
+        if (readyCombo) {
+          readyCombo.value = lang;
+          readyCombo.dispatchEvent(new Event('change'));
+        } else {
+          window.location.reload();
+        }
+      }, 900);
+    }
+  }
+
+  // Inicialització d'idioma en carregar la pàgina
+  const initialLang = getActiveLang();
+  updateLangButtons(initialLang);
+  if (initialLang !== 'ca') {
+    loadGoogleTranslate();
+  }
+
+  // Gestió del modal d'avís
+  const noticeModal = document.getElementById('translate-notice-modal');
+  const noticeTitle = document.getElementById('translate-notice-title');
+  const noticeBody = document.getElementById('translate-notice-body');
+  const noticeConfirm = document.getElementById('translate-notice-confirm');
+  const noticeCancel = document.getElementById('translate-notice-cancel');
+
+  let pendingLang: 'es' | 'en' | null = null;
+
+  function openNoticeModal(lang: 'es' | 'en') {
+    const msg = TRANSLATE_MESSAGES[lang];
+    pendingLang = lang;
+    if (noticeTitle) noticeTitle.textContent = msg.title;
+    if (noticeBody) noticeBody.textContent = msg.body;
+    if (noticeConfirm) noticeConfirm.textContent = msg.confirm;
+    if (noticeCancel) noticeCancel.textContent = msg.cancel;
+    noticeModal?.classList.remove('hidden');
+    noticeModal?.classList.add('flex');
+  }
+
+  function closeNoticeModal() {
+    pendingLang = null;
+    noticeModal?.classList.add('hidden');
+    noticeModal?.classList.remove('flex');
+  }
+
+  noticeConfirm?.addEventListener('click', () => {
+    if (!pendingLang) return;
+    const chosen = pendingLang;
+    closeNoticeModal();
+    applyLanguage(chosen);
+  });
+
+  noticeCancel?.addEventListener('click', closeNoticeModal);
+
+  noticeModal?.addEventListener('click', (e) => {
+    if (e.target === noticeModal) closeNoticeModal();
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.lang-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const targetLang = btn.dataset.lang as 'ca' | 'es' | 'en' | undefined;
+      if (!targetLang || targetLang === getActiveLang()) return;
+
+      if (targetLang === 'ca') {
+        applyLanguage('ca');
+      } else {
+        openNoticeModal(targetLang);
+      }
+    });
+  });
 </script>
 

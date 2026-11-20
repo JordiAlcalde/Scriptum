@@ -1,0 +1,95 @@
+---
+interface Props {
+  title: string;
+  text?: string;
+  label?: string;
+  className?: string;
+}
+
+const {
+  title,
+  text = '',
+  label = 'Compartir',
+  className = '',
+} = Astro.props;
+---
+
+<button
+  type="button"
+  data-share-btn
+  data-share-title={title}
+  data-share-text={text}
+  data-share-default-label={label}
+  title="Compartir aquest enllaç"
+  aria-label={label}
+  class={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] text-xs font-sans font-medium transition-all cursor-pointer ${className}`}
+>
+  <svg
+    data-share-icon
+    class="w-3.5 h-3.5 shrink-0"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="18" cy="5" r="3"></circle>
+    <circle cx="6" cy="12" r="3"></circle>
+    <circle cx="18" cy="19" r="3"></circle>
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+  </svg>
+  <span data-share-label>{label}</span>
+</button>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-share-btn]').forEach((btn) => {
+    if (btn.dataset.shareBound === '1') return;
+    btn.dataset.shareBound = '1';
+
+    btn.addEventListener('click', async () => {
+      const title = btn.dataset.shareTitle || document.title;
+      const text = btn.dataset.shareText || '';
+      const defaultLabel = btn.dataset.shareDefaultLabel || 'Compartir';
+      const url = window.location.href;
+      const labelEl = btn.querySelector<HTMLElement>('[data-share-label]');
+
+      const showCopiedFeedback = () => {
+        if (!labelEl) return;
+        labelEl.textContent = '✓ Enllaç copiat';
+        btn.classList.add('border-emerald-600/40', 'text-emerald-700', 'bg-emerald-500/10');
+        setTimeout(() => {
+          labelEl.textContent = defaultLabel;
+          btn.classList.remove('border-emerald-600/40', 'text-emerald-700', 'bg-emerald-500/10');
+        }, 2500);
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, text, url });
+          return;
+        } catch (err: any) {
+          // Si l'usuari cancel·la el menú natiu, no fem res
+          if (err?.name === 'AbortError') return;
+        }
+      }
+
+      // Alternativa per a ordinador: copia al porta-retalls
+      try {
+        await navigator.clipboard.writeText(url);
+        showCopiedFeedback();
+      } catch {
+        // Fallback clàssic si clipboard API no està disponible
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showCopiedFeedback();
+      }
+    });
+  });
+</script>
