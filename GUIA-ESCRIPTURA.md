@@ -195,3 +195,49 @@ Text del primer episodi del segon capítol...
 ```
 
 > **Truc per a `ordre`:** Si numeres amb passos de 10 (`10`, `20`, `30`…) o fas servir decimals (`1.5`, `2.5`), sempre podràs intercalar una dedicatòria, una frase aïllada o un episodi nou sense haver de renumerar la resta!
+
+---
+
+## 4. Inserir imatges (mida normal, mida concreta i peu de foto)
+
+Desa sempre les imatges dins de `c:\Antigravity\Scriptum\public\imatges\` (sense posar `public` a la ruta).
+
+### Mida automàtica (Markdown estàndard)
+```markdown
+![Descripció de la imatge](/imatges/foto.jpg)
+```
+
+### Mida concreta en píxels (p. ex. 400 px d'ample)
+```html
+<img src="/imatges/foto.jpg" alt="Descripció de la imatge" width="400" />
+```
+
+### Mida en percentatge de la columna de text (p. ex. 60%)
+```html
+<img src="/imatges/foto.jpg" alt="Descripció de la imatge" style="width: 60%;" />
+```
+
+### Imatge amb el text al voltant (esquerra o dreta)
+Posa aquesta línia **just abans del paràgraf** que vols que envolti la imatge:
+
+- **Imatge a l'esquerra, text a la dreta:**
+```html
+<img src="/imatges/foto.jpg" alt="Descripció de la imatge" width="280" class="img-esquerra" />
+```
+
+- **Imatge a la dreta, text a l'esquerra:**
+```html
+<img src="/imatges/foto.jpg" alt="Descripció de la imatge" width="280" class="img-dreta" />
+```
+
+*(En ordinador i tauleta el text envolta la imatge amb marge net; en mòbil es centra automàticament perquè el text no quedi massa estret.)*
+
+### Imatge amb peu de foto en cursiva
+```html
+<figure style="text-align: center; margin: 2rem auto;">
+  <img src="/imatges/foto.jpg" alt="Descripció de la imatge" width="420" style="margin-bottom: 0.5rem;" />
+  <figcaption style="font-size: 0.85rem; opacity: 0.75; font-style: italic;">Text del peu de foto.</figcaption>
+</figure>
+```
+
+> **Recordatori:** totes les imatges queden centrades, amb vores arrodonides i adaptades automàticament a pantalles de mòbil. Quan enganxis aquests blocs a Zettlr, fes servir **`Ctrl + Shift + V`** (*text pla*).

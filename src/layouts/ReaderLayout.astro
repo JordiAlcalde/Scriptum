@@ -13,6 +13,7 @@ interface Props {
   title: string;
   llibre: string;
   llibreId: string;
+  itemSlug: string;
   itemLabel: string;
   tipus?: RelatTipus;
   seccio?: string;
@@ -27,6 +28,7 @@ const {
   title,
   llibre,
   llibreId,
+  itemSlug,
   itemLabel,
   tipus = 'capitol',
   seccio,
@@ -109,6 +111,30 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
       </>
     )}
 
+    <!-- Barra discreta de punt de llibre i estat de lectura -->
+    <div
+      id="reader-progress-tracker"
+      data-book-id={llibreId}
+      data-item-slug={itemSlug}
+      data-item-label={itemLabel}
+      data-item-title={title}
+      class="mb-6 flex flex-wrap items-center justify-between gap-3 px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)]/70 text-xs font-sans"
+    >
+      <span class="text-[var(--text-muted)] inline-flex items-center gap-1.5">
+        <span>🔖</span>
+        <span>Punt de llibre desat en aquesta pàgina</span>
+      </span>
+
+      <button
+        id="btn-toggle-chapter-read"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-main)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium transition-all cursor-pointer"
+      >
+        <span id="chapter-read-icon">○</span>
+        <span id="chapter-read-text">Marcar com a llegit</span>
+      </button>
+    </div>
+
     <!-- Navegació entre pàgines (Anterior / Següent) -->
     <nav class="pt-8 border-t border-[var(--border-color)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 font-sans text-xs">
       {prevChapter ? (
@@ -136,6 +162,7 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
 
       {nextChapter ? (
         <a
+          id="btn-next-chapter"
           href={`/relats/${llibreId}/${nextChapter.slug}`}
           class="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex flex-col gap-1 text-right group"
         >
@@ -159,3 +186,74 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
     </nav>
   </article>
 </BaseLayout>
+
+<script>
+  import {
+    isBookItemRead,
+    saveBookBookmark,
+    setBookItemRead,
+  } from '../utils/readingProgress';
+
+  const tracker = document.getElementById('reader-progress-tracker');
+  if (tracker) {
+    const bookId = tracker.dataset.bookId || '';
+    const itemSlug = tracker.dataset.itemSlug || '';
+    const itemLabel = tracker.dataset.itemLabel || '';
+    const itemTitle = tracker.dataset.itemTitle || '';
+
+    if (bookId && itemSlug) {
+      // Desa automàticament el punt de llibre en entrar
+      saveBookBookmark(bookId, itemSlug, itemLabel, itemTitle);
+
+      const toggleBtn = document.getElementById('btn-toggle-chapter-read');
+      const iconEl = document.getElementById('chapter-read-icon');
+      const textEl = document.getElementById('chapter-read-text');
+      const nextBtn = document.getElementById('btn-next-chapter');
+
+      let manuallyUnmarked = false;
+
+      function renderReadState(isRead: boolean) {
+        if (!toggleBtn || !iconEl || !textEl) return;
+        if (isRead) {
+          iconEl.textContent = '✓';
+          textEl.textContent = 'Llegit';
+          toggleBtn.classList.add('border-emerald-600/40', 'text-emerald-700', 'bg-emerald-500/10');
+          toggleBtn.classList.remove('border-[var(--border-color)]', 'text-[var(--text-muted)]', 'bg-[var(--bg-main)]');
+        } else {
+          iconEl.textContent = '○';
+          textEl.textContent = 'Marcar com a llegit';
+          toggleBtn.classList.remove('border-emerald-600/40', 'text-emerald-700', 'bg-emerald-500/10');
+          toggleBtn.classList.add('border-[var(--border-color)]', 'text-[var(--text-muted)]', 'bg-[var(--bg-main)]');
+        }
+      }
+
+      renderReadState(isBookItemRead(bookId, itemSlug));
+
+      toggleBtn?.addEventListener('click', () => {
+        const nextState = !isBookItemRead(bookId, itemSlug);
+        manuallyUnmarked = !nextState;
+        setBookItemRead(bookId, itemSlug, nextState, { label: itemLabel, title: itemTitle });
+        renderReadState(nextState);
+      });
+
+      // Marca automàticament com a llegit en clicar "Següent"
+      nextBtn?.addEventListener('click', () => {
+        if (!manuallyUnmarked) {
+          setBookItemRead(bookId, itemSlug, true, { label: itemLabel, title: itemTitle });
+        }
+      });
+
+      // Marca automàticament com a llegit en arribar al final del text (>= 85% scroll)
+      const checkScrollRead = () => {
+        if (manuallyUnmarked || isBookItemRead(bookId, itemSlug)) return;
+        const scrollPos = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (scrollPos >= 0.85) {
+          setBookItemRead(bookId, itemSlug, true, { label: itemLabel, title: itemTitle });
+          renderReadState(true);
+        }
+      };
+
+      window.addEventListener('scroll', checkScrollRead, { passive: true });
+    }
+  }
+</script>

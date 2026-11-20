@@ -33,7 +33,12 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
 ---
 
 <BaseLayout title={`${llibreTitol} — Índex de l'obra | Scriptum`} description={sinopsi}>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-12">
+  <div
+    id="book-index-container"
+    data-book-id={llibreId}
+    data-total-items={chapters.length}
+    class="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-12"
+  >
     <!-- Enllaç enrere -->
     <a href="/relats" class="text-xs font-sans font-semibold text-[var(--accent)] hover:underline inline-flex items-center gap-1">
       <span>← Tornar a la biblioteca</span>
@@ -64,16 +69,21 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
           {sinopsi}
         </p>
 
-        <div class="pt-4 flex items-center gap-3">
+        <div class="pt-4 flex items-center gap-3 flex-wrap">
           {chapters.length > 0 && (
             <a
+              id="book-index-cta"
               href={`/relats/${llibreId}/${firstSlug}`}
               class="px-6 py-3 rounded-xl bg-[var(--accent)] text-white text-xs font-sans font-semibold hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2"
             >
-              <span>Començar lectura</span>
-              <span>📖</span>
+              <span id="book-index-cta-text">Començar lectura</span>
+              <span id="book-index-cta-icon">📖</span>
             </a>
           )}
+          <span
+            id="book-index-progress"
+            class="hidden text-xs font-mono text-[var(--text-muted)] px-3 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)]"
+          ></span>
         </div>
       </div>
     </div>
@@ -105,15 +115,22 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
 
                 return isBlank ? (
                   <a
+                    data-chapter-row={itemSlug}
                     href={`/relats/${llibreId}/${itemSlug}`}
                     class="group px-5 py-3.5 rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-main)] hover:border-[var(--accent)] transition-all flex items-center justify-between gap-4"
                   >
-                    <div class="flex items-center gap-3 min-w-0">
+                    <div class="flex items-center gap-3 min-w-0 flex-wrap">
                       <span class="text-[11px] font-mono uppercase tracking-wider text-[var(--text-muted)] shrink-0">
                         ❦ {label}
                       </span>
                       <span class="font-serif italic text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors truncate">
                         {item.data.title}
+                      </span>
+                      <span data-bookmark-badge class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] font-semibold">
+                        🔖 Punt de llibre
+                      </span>
+                      <span data-read-badge class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-600/20">
+                        ✓ Llegit
                       </span>
                     </div>
 
@@ -123,11 +140,12 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                   </a>
                 ) : (
                   <a
+                    data-chapter-row={itemSlug}
                     href={`/relats/${llibreId}/${itemSlug}`}
                     class="group p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] transition-all flex items-center justify-between gap-4 shadow-2xs"
                   >
                     <div class="space-y-1">
-                      <div class="flex items-center gap-2 text-xs font-mono text-[var(--accent)]">
+                      <div class="flex items-center gap-2 text-xs font-mono text-[var(--accent)] flex-wrap">
                         <span>{label}</span>
                         {item.data.tempsLectura && (
                           <>
@@ -135,6 +153,12 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                             <span class="text-[var(--text-muted)]">{item.data.tempsLectura}</span>
                           </>
                         )}
+                        <span data-bookmark-badge class="hidden text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] font-semibold">
+                          🔖 Punt de llibre
+                        </span>
+                        <span data-read-badge class="hidden text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-600/20">
+                          ✓ Llegit
+                        </span>
                       </div>
                       <h3 class="font-display font-bold text-lg text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
                         {item.data.title}
@@ -159,3 +183,51 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
     </section>
   </div>
 </BaseLayout>
+
+<script>
+  import { getBookProgress } from '../../../utils/readingProgress';
+
+  const container = document.getElementById('book-index-container');
+  if (container) {
+    const bookId = container.dataset.bookId || '';
+    const total = parseInt(container.dataset.totalItems || '0', 10);
+    const progress = bookId ? getBookProgress(bookId) : null;
+
+    if (progress) {
+      const cta = document.getElementById('book-index-cta') as HTMLAnchorElement | null;
+      const ctaText = document.getElementById('book-index-cta-text');
+      const ctaIcon = document.getElementById('book-index-cta-icon');
+      const progressEl = document.getElementById('book-index-progress');
+
+      if (cta && progress.lastSlug) {
+        cta.href = `/relats/${bookId}/${progress.lastSlug}`;
+        if (ctaText) {
+          ctaText.textContent = progress.lastLabel
+            ? `Continuar lectura · ${progress.lastLabel}`
+            : 'Continuar lectura';
+        }
+        if (ctaIcon) ctaIcon.textContent = '🔖';
+      }
+
+      const readSet = new Set(progress.readSlugs || []);
+      if (progressEl && readSet.size > 0 && total > 0) {
+        progressEl.classList.remove('hidden');
+        progressEl.textContent = `Progrés: ${readSet.size} de ${total} llegits`;
+      }
+
+      container.querySelectorAll<HTMLElement>('[data-chapter-row]').forEach((row) => {
+        const slug = row.dataset.chapterRow || '';
+        const bookmarkBadge = row.querySelector<HTMLElement>('[data-bookmark-badge]');
+        const readBadge = row.querySelector<HTMLElement>('[data-read-badge]');
+
+        if (slug && slug === progress.lastSlug && bookmarkBadge) {
+          bookmarkBadge.classList.remove('hidden');
+          row.classList.add('border-[var(--accent)]/60');
+        }
+        if (slug && readSet.has(slug) && readBadge) {
+          readBadge.classList.remove('hidden');
+        }
+      });
+    }
+  }
+</script>

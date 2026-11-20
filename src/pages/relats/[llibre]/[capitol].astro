@@ -22,6 +22,7 @@ export async function getStaticPaths() {
         params: { llibre: bId, capitol: itemSlug },
         props: {
           chapter: item,
+          itemSlug,
           itemLabel: getItemLabel(item),
           bookStatus,
           prevChapter: prevItem
@@ -46,7 +47,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { chapter, itemLabel, bookStatus, prevChapter, nextChapter } = Astro.props;
+const { chapter, itemSlug, itemLabel, bookStatus, prevChapter, nextChapter } = Astro.props;
 const { Content } = await chapter.render();
 ---
 
@@ -54,6 +55,7 @@ const { Content } = await chapter.render();
   title={chapter.data.title}
   llibre={chapter.data.llibre}
   llibreId={chapter.data.llibreId}
+  itemSlug={itemSlug}
   itemLabel={itemLabel}
   tipus={chapter.data.tipus}
   seccio={chapter.data.seccio}

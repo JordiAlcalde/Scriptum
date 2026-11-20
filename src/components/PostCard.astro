@@ -19,11 +19,22 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
 }).format(pubDate);
 ---
 
-<article class="group bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-6 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4">
+<article
+  data-post-card={slug}
+  class="group bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-6 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4"
+>
   <div class="space-y-2.5">
-    <div class="flex items-center justify-between text-xs font-mono text-[var(--text-muted)]">
+    <div class="flex items-center justify-between gap-2 text-xs font-mono text-[var(--text-muted)]">
       <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-      <span>{readingTime} de lectura</span>
+      <div class="flex items-center gap-2">
+        <span
+          data-post-read-badge
+          class="hidden text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-600/20"
+        >
+          ✓ Llegit
+        </span>
+        <span>{readingTime} de lectura</span>
+      </div>
     </div>
 
     <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
@@ -58,4 +69,17 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
     </a>
   </div>
 </article>
+
+<script>
+  import { isBlogPostRead } from '../utils/readingProgress';
+
+  document.querySelectorAll<HTMLElement>('[data-post-card]').forEach((card) => {
+    const slug = card.dataset.postCard;
+    if (!slug) return;
+    if (isBlogPostRead(slug)) {
+      const badge = card.querySelector<HTMLElement>('[data-post-read-badge]');
+      badge?.classList.remove('hidden');
+    }
+  });
+</script>
 

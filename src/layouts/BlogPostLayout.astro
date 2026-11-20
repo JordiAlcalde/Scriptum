@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import { slugifyTag } from '../utils/tags';
 
 interface Props {
+  slug?: string;
   title: string;
   description: string;
   pubDate: Date;
@@ -11,7 +12,7 @@ interface Props {
   readingTime?: string;
 }
 
-const { title, description, pubDate, author = 'Scriptum', tags = [], readingTime = '4 min' } = Astro.props;
+const { slug = '', title, description, pubDate, author = 'Scriptum', tags = [], readingTime = '4 min' } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   day: 'numeric',
@@ -63,9 +64,26 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
       <slot />
     </div>
 
-    <div class="scene-break my-16 text-center">
+    <div class="scene-break my-12 text-center">
       <span>❦</span>
     </div>
+
+    {slug && (
+      <div
+        id="blog-read-tracker"
+        data-post-slug={slug}
+        class="mb-8 flex items-center justify-end text-xs font-sans"
+      >
+        <button
+          id="btn-toggle-post-read"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--card-bg)] text-[var(--text-muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] font-medium transition-all cursor-pointer"
+        >
+          <span id="post-read-icon">○</span>
+          <span id="post-read-text">Marcar com a llegit</span>
+        </button>
+      </div>
+    )}
 
     <div class="p-6 rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] flex flex-col sm:flex-row items-center justify-between gap-4 font-sans text-xs">
       <div>
@@ -78,4 +96,54 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  import { isBlogPostRead, setBlogPostRead } from '../utils/readingProgress';
+
+  const tracker = document.getElementById('blog-read-tracker');
+  if (tracker) {
+    const postSlug = tracker.dataset.postSlug || '';
+    if (postSlug) {
+      const toggleBtn = document.getElementById('btn-toggle-post-read');
+      const iconEl = document.getElementById('post-read-icon');
+      const textEl = document.getElementById('post-read-text');
+      let manuallyUnmarked = false;
+
+      function renderState(isRead: boolean) {
+        if (!toggleBtn || !iconEl || !textEl) return;
+        if (isRead) {
+          iconEl.textContent = '✓';
+          textEl.textContent = 'Article llegit';
+          toggleBtn.classList.add('border-emerald-600/40', 'text-emerald-700', 'bg-emerald-500/10');
+          toggleBtn.classList.remove('border-[var(--border-color)]', 'text-[var(--text-muted)]', 'bg-[var(--card-bg)]');
+        } else {
+          iconEl.textContent = '○';
+          textEl.textContent = 'Marcar com a llegit';
+          toggleBtn.classList.remove('border-emerald-600/40', 'text-emerald-700', 'bg-emerald-500/10');
+          toggleBtn.classList.add('border-[var(--border-color)]', 'text-[var(--text-muted)]', 'bg-[var(--card-bg)]');
+        }
+      }
+
+      renderState(isBlogPostRead(postSlug));
+
+      toggleBtn?.addEventListener('click', () => {
+        const next = !isBlogPostRead(postSlug);
+        manuallyUnmarked = !next;
+        setBlogPostRead(postSlug, next);
+        renderState(next);
+      });
+
+      const checkScroll = () => {
+        if (manuallyUnmarked || isBlogPostRead(postSlug)) return;
+        const scrollPos = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
+        if (scrollPos >= 0.85) {
+          setBlogPostRead(postSlug, true);
+          renderState(true);
+        }
+      };
+
+      window.addEventListener('scroll', checkScroll, { passive: true });
+    }
+  }
+</script>
 
