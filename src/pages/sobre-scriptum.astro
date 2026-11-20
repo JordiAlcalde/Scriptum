@@ -2,27 +2,61 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Sobre l'Autor & Scriptum" description="La història i el propòsit darrere d'aquest espai de lletres.">
+<BaseLayout title="L'Autor & Scriptum | Jordi Alcalde" description="Qui hi ha darrere de Scriptum: perfil de Jordi Alcalde i el propòsit d'aquest espai de lletres.">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-10">
     <header class="space-y-3 pb-8 border-b border-[var(--border-color)]">
       <span class="text-xs uppercase font-mono tracking-widest text-[var(--accent)] font-semibold">
-        Manifest & Trajectòria
+        L'Autor & Manifest
       </span>
       <h1 class="font-display font-bold text-3xl sm:text-5xl text-[var(--text-primary)]">
-        Sobre Scriptum
+        Jordi Alcalde
       </h1>
       <p class="font-serif text-lg text-[var(--text-muted)] italic leading-relaxed">
         «Escriure és buscar el silenci necessari per escoltar allò que no fa soroll.»
       </p>
     </header>
 
+    <!-- Targeta de perfil amb retrat -->
+    <section class="p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start shadow-2xs">
+      <div class="w-40 h-48 sm:w-44 sm:h-52 rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-md shrink-0 bg-[var(--bg-main)]">
+        <img
+          src="/imatges/jordi-alcalde-7.jpg"
+          alt="Retrat de Jordi Alcalde"
+          class="w-full h-full object-cover"
+        />
+      </div>
+
+      <div class="space-y-4 text-center sm:text-left">
+        <div>
+          <span class="text-[11px] font-mono uppercase tracking-widest text-[var(--accent)] font-semibold">
+            Qui escriu
+          </span>
+          <h2 class="font-display font-bold text-2xl text-[var(--text-primary)] mt-0.5">
+            Una mirada curiosa, sense presses
+          </h2>
+        </div>
+
+        <p class="font-serif text-sm sm:text-base text-[var(--text-primary)] leading-relaxed">
+          Als seixanta-vuit anys gaudeixo del privilegi de la jubilació, aquesta etapa en què el temps torna a ser meu i el puc repartir entre tot allò que em desperta interès. Autodidacta en pràcticament tot el que he anat tocant al llarg de la vida, continuo convençut que mai no s'acaba d'aprendre —i és precisament aquesta curiositat la que em manté en moviment.
+        </p>
+
+        <p class="font-serif text-sm sm:text-base text-[var(--text-primary)] leading-relaxed">
+          Sóc conversador de mena: m'agrada tant xerrar com escoltar, perquè de cada conversa sempre en surt un matís o una història nova. Confesso, sense embuts, que llegeixo menys del que segurament hauria de fer algú que escriu; però jo no escric per ofici ni per solemnitat, sinó pel pur gust d'expressar-me i comunicar. Escriure no ho ocupa tot: és una peça més —ben estimada— d'aquest mosaic d'aficions amb què omplo els dies.
+        </p>
+      </div>
+    </section>
+
     <div class="prose-literaria space-y-6">
+      <h2 class="font-display font-bold text-2xl text-[var(--text-primary)] pt-2">
+        Sobre Scriptum
+      </h2>
+
       <p>
-        **Scriptum** és un projecte nascut del desig profund de crear un racó literari net, sense interferències comercials ni presses algorítmiques. Aquí, cada capítol i cada article té el seu temps per ser escrit i llegit.
+        <strong>Scriptum</strong> és un projecte nascut del meu desig de crear un racó literari net, sense interferències comercials ni presses algorítmiques. Aquí, cada capítol i cada article té el seu temps per ser escrit i llegit.
       </p>
 
       <p>
-        La paraula escrita té una textura única: pot reconstruir un carreró d'infantesa, evocar la fusta d'un escriptori vell o reflexionar sobre els dilemes del nostre temps. Aquest espai està concebut com una biblioteca oberta, on els lectors poden acompanyar el naixement d'obres de ficció episodi rere episodi.
+        La paraula escrita té una textura única: pot reconstruir un carreró d'infantesa, evocar la fusta d'un escriptori vell o ajudar-me a reflexionar sobre els dilemes del nostre temps. He concebut aquest espai com una biblioteca oberta, on qui vulgui pugui acompanyar el naixement dels meus relats i apunts al seu ritme.
       </p>
 
       <div class="scene-break">
@@ -34,15 +68,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </h2>
 
       <p>
-        Inspirats en la tradició del fulletó literari, creiem que la relació entre qui escriu i qui llegeix es fa més rica quan la història avança a poc a poc. La pausa entre capítols permet que la imaginació del lector completi els silencis.
+        Inspirat en la tradició del fulletó literari, crec que la relació entre qui escriu i qui llegeix es fa més rica quan la història avança a poc a poc. La pausa entre capítols permet que la imaginació del lector completi els silencis.
       </p>
 
       <div class="p-6 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] mt-8 space-y-2">
         <h3 class="font-display font-bold text-base text-[var(--text-primary)]">Vols conversar o compartir impressions?</h3>
-        <p class="text-xs text-[var(--text-muted)] font-sans">
-          Estic sempre obert a rebre comentaris, preguntes o col·laboracions.
+        <p class="text-xs text-[var(--text-muted)] font-sans !mb-2">
+          Com a bon conversador, sempre em farà il·lusió rebre comentaris, impressions o simplement xerrar una estona.
         </p>
-        <div class="pt-2">
+        <div class="pt-1">
           <a href="/contacte" class="text-xs font-sans font-semibold text-[var(--accent)] hover:underline inline-flex items-center gap-1">
             <span>Ves al formulari de contacte</span>
             <span>→</span>
@@ -52,4 +86,3 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </div>
 </BaseLayout>
-

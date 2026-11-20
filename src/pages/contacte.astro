@@ -16,7 +16,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
     </header>
 
-    <form class="space-y-4 font-sans text-xs bg-[var(--card-bg)] p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] shadow-xs">
+    <!-- Avís de confirmació després d'enviar -->
+    <div
+      id="contact-success-banner"
+      class="hidden p-5 rounded-2xl border border-emerald-600/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-sans text-sm space-y-1"
+    >
+      <p class="font-semibold">✓ Missatge enviat correctament!</p>
+      <p class="text-xs opacity-90">Gràcies per escriure'm. Et respondré tan aviat com pugui.</p>
+    </div>
+
+    <form
+      action="https://formsubmit.co/noufutur2001@gmail.com"
+      method="POST"
+      class="space-y-4 font-sans text-xs bg-[var(--card-bg)] p-6 sm:p-8 rounded-3xl border border-[var(--border-color)] shadow-xs"
+    >
+      <!-- Configuració FormSubmit -->
+      <input type="hidden" name="_subject" value="Nou missatge des de Scriptum" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_next" value="https://scriptum.minimmon.cat/contacte?enviat=1" />
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+
       <div>
         <label for="nom" class="block font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">
           Nom o Àlies *
@@ -24,6 +43,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <input
           type="text"
           id="nom"
+          name="Nom"
           required
           placeholder="El teu nom..."
           class="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] text-[var(--text-primary)] outline-none focus:border-[var(--accent)] text-sm"
@@ -37,6 +57,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <input
           type="email"
           id="email"
+          name="email"
           required
           placeholder="nom@exemple.cat"
           class="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] text-[var(--text-primary)] outline-none focus:border-[var(--accent)] text-sm font-mono"
@@ -50,6 +71,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <input
           type="text"
           id="assumpte"
+          name="Assumpte"
           placeholder="Ex: Sobre 'Cròniques del silenci', comentari general..."
           class="w-full px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] text-[var(--text-primary)] outline-none focus:border-[var(--accent)] text-sm"
         />
@@ -61,6 +83,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </label>
         <textarea
           id="missatge"
+          name="Missatge"
           rows="5"
           required
           placeholder="Escriu aquí les teves paraules..."
@@ -68,7 +91,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         ></textarea>
       </div>
 
-      <div class="pt-2 flex items-center justify-between">
+      <div class="pt-2 flex items-center justify-between gap-4 flex-wrap">
         <span class="text-[11px] text-[var(--text-muted)]">
           * Les teves dades no es compartiran mai.
         </span>
@@ -85,3 +108,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 </BaseLayout>
 
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('enviat') === '1') {
+    document.getElementById('contact-success-banner')?.classList.remove('hidden');
+  }
+</script>
