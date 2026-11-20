@@ -1,7 +1,7 @@
 ---
 title: "L'art de narrar per capítols: La tradició del fulletó"
 description: "Com el format per entregues va canviar la literatura del segle XIX i per què manté tota la seva màgia avui dia."
-pubDate: 2026-11-19
+pubDate: 2012-01-02
 author: "Scriptum"
 tags: ["literatura", "processos", "relats"]
 featured: false
@@ -11,5 +11,6 @@ Abans que les novel·les arribessin a les llibreries enquadernades en tapa dura,
 
 Aquell format, conegut com a fulletó (*feuilleton*), tenia una força innegable: obligava l'escriptor a mantenir la tensió, a tancar cada episodi deixant el lector amb ganes de saber què passaria l'endemà i a teixir una complicitat íntima amb qui llegia.
 
-En aquest espai hem volgut recuperar aquesta màgia: relats que creixen capítol a capítol, al seu temps, permetent que cada personatge maduri a la ment del lector abans de fer el pas següent.
+En aquest espai he volgut recuperar aquesta màgia: relats que creixen capítol a capítol, al seu temps, permetent que cada personatge maduri a la ment del lector abans de fer el pas següent.
 
+Garantir una cadència en el lliurament de cada nou capítol és impensable, gairebé utópic. Moltes altres activitats ocupen el meu temps.

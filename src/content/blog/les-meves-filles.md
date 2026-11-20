@@ -3,6 +3,7 @@ title: "Les meves filles"
 description: Un retrat ràpid i sentit de les joies més preuades.
 pubDate: 2012-10-30
 author: Jordi Alcalde
+image: "/imatges/filles_al_oli.jpg"
 tags:
   - família
   - gent

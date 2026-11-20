@@ -23,11 +23,12 @@ export async function getStaticPaths() {
       firstSlug: book.firstSlug,
       countLabel: book.countLabel,
       estat: book.estat,
+      portada: book.portada,
     },
   }));
 }
 
-const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat } = Astro.props;
+const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat, portada } = Astro.props;
 const sectionBlocks = groupItemsBySection(chapters);
 const hasSections = sectionBlocks.some((b) => b.seccio !== null);
 ---
@@ -46,13 +47,23 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
 
     <!-- Capçalera del llibre -->
     <div class="p-8 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] flex flex-col md:flex-row gap-8 items-start">
-      <div class="w-full md:w-48 h-64 rounded-2xl bg-gradient-to-br from-stone-800 to-amber-950 p-6 text-white flex flex-col justify-between shrink-0 shadow-lg relative overflow-hidden">
-        <span class="text-[10px] tracking-widest uppercase font-mono opacity-70">Scriptum</span>
-        <h2 class="font-display font-bold text-2xl leading-tight">
-          {llibreTitol}
-        </h2>
-        <span class="text-xs font-mono opacity-80 border-t border-white/20 pt-2">{countLabel}</span>
-      </div>
+      {portada ? (
+        <div class="w-full md:w-48 h-72 md:h-64 rounded-2xl overflow-hidden shrink-0 shadow-lg border border-[var(--border-color)] bg-[var(--bg-main)]">
+          <img
+            src={portada}
+            alt={`Portada de ${llibreTitol}`}
+            class="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <div class="w-full md:w-48 h-64 rounded-2xl bg-gradient-to-br from-stone-800 to-amber-950 p-6 text-white flex flex-col justify-between shrink-0 shadow-lg relative overflow-hidden">
+          <span class="text-[10px] tracking-widest uppercase font-mono opacity-70">Scriptum</span>
+          <h2 class="font-display font-bold text-2xl leading-tight">
+            {llibreTitol}
+          </h2>
+          <span class="text-xs font-mono opacity-80 border-t border-white/20 pt-2">{countLabel}</span>
+        </div>
+      )}
 
       <div class="flex-1 space-y-4">
         <div class="flex items-center gap-2 text-xs font-mono uppercase tracking-widest font-semibold flex-wrap">

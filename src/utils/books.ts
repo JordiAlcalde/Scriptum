@@ -13,6 +13,7 @@ export interface BookGroup {
   readingCount: number;
   countLabel: string;
   estat: BookStatus;
+  portada?: string;
 }
 
 export interface BookSectionBlock {
@@ -122,6 +123,7 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
   return Array.from(map.entries()).map(([id, rawItems]) => {
     const items = sortBookItems(rawItems);
     const firstWithSinopsi = items.find((i) => i.data.sinopsi?.trim());
+    const firstWithPortada = items.find((i) => i.data.portada?.trim());
     const titol = items[0]?.data.llibre || 'Obra';
     const sinopsi = firstWithSinopsi?.data.sinopsi || 'Una història teixida pàgina a pàgina.';
     const firstSlug = items[0] ? getItemSlug(items[0]) : 'capitol-01';
@@ -146,6 +148,7 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
       readingCount,
       countLabel: `${readingCount} ${unit}`,
       estat: getBookStatus(items),
+      portada: firstWithPortada?.data.portada?.trim(),
     };
   });
 }

@@ -27,11 +27,14 @@ description: "Resum breu d'una o dues línies per a la targeta del blog."
 pubDate: 2026-11-19
 author: "Scriptum"
 tags: ["família", "sentiments"]
+image: "/imatges/miniatura-article.jpg"
 featured: false
 ---
 
 Aquí comença el cos de l'article...
 ```
+
+> **Miniatura de la fitxa del blog:** el camp `image` és opcional. Si l'afegeixes, mostrarà una miniatura panoràmica (16:9) a la fitxa de l'article (al Blog, als filtres d'etiquetes i a la portada), i pots tornar a posar la mateixa imatge dins del text allà on vulguis.
 
 ---
 
@@ -68,6 +71,7 @@ Tots els fitxers `.md` d'aquell llibre han de tenir **exactament el mateix `llib
 | `seccio` | Opcional | Agrupa diversos episodis sota un encapçalament a l'índex (ex. `"Capítol I — El viatge"`) |
 | `etiqueta` | Opcional | Subtítol personalitzat (ex. `"Episodi 1"`, `"Interludi"`). Si no el poses, s'assigna sol segons `tipus`/`capitol` |
 | `estat` | Opcional | `"en-curs"` (per defecte) o `"acabat"`. N'hi ha prou de posar `estat: "acabat"` en un sol fitxer del llibre per marcar-lo com a **Obra completa** |
+| `portada` | Opcional | Ruta de la portada del llibre (ex. `"/imatges/portada-llibre.jpg"`). N'hi ha prou de posar-ho en un sol fitxer del llibre (recomanat format vertical 2:3 o 3:4) |
 | `sinopsi` | Opcional | Resum curt (la primera sinopsi del llibre es fa servir com a descripció del llibre) |
 | `tempsLectura` | Opcional | Temps estimat (ex. `"5 min"`). Si no el poses, no es mostra |
 

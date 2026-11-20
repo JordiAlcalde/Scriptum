@@ -7,10 +7,11 @@ interface Props {
   description: string;
   pubDate: Date;
   tags?: string[];
+  image?: string;
   readingTime?: string;
 }
 
-const { slug, title, description, pubDate, tags = [], readingTime = '4 min' } = Astro.props;
+const { slug, title, description, pubDate, tags = [], image, readingTime = '4 min' } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   day: 'numeric',
@@ -23,7 +24,21 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   data-post-card={slug}
   class="group bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl p-6 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between space-y-4"
 >
-  <div class="space-y-2.5">
+  <div class="space-y-3">
+    {image && (
+      <a
+        href={`/blog/${slug}`}
+        class="block aspect-[16/9] w-full overflow-hidden rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)]"
+      >
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+      </a>
+    )}
+
     <div class="flex items-center justify-between gap-2 text-xs font-mono text-[var(--text-muted)]">
       <time datetime={pubDate.toISOString()}>{formattedDate}</time>
       <div class="flex items-center gap-2">
