@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const currentYear = new Date().getFullYear();
+---
+
+<BaseLayout
+  title="Avís legal i drets d'autor | Scriptum"
+  description="Informació sobre propietat intel·lectual, drets d'autor, còpies, distribució i privacitat a Scriptum."
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-10">
+    <header class="space-y-3 pb-8 border-b border-[var(--border-color)]">
+      <span class="text-xs uppercase font-mono tracking-widest text-[var(--accent)] font-semibold">
+        Informació Legal & Autoria
+      </span>
+      <h1 class="font-display font-bold text-3xl sm:text-5xl text-[var(--text-primary)]">
+        Propietat intel·lectual i avís legal
+      </h1>
+      <p class="font-serif text-base text-[var(--text-muted)] leading-relaxed">
+        Condicions d'ús, drets d'autor i compromís de privacitat de l'espai literari <strong>Scriptum</strong> (<span class="font-mono text-sm">scriptum.minimmon.cat</span>).
+      </p>
+    </header>
+
+    <div class="prose-literaria space-y-8">
+      <section class="space-y-3">
+        <h2 class="font-display font-bold text-2xl text-[var(--text-primary)]">
+          1. Titularitat i drets d'autor
+        </h2>
+        <p>
+          Tots els textos, llibres, relats, capítols, articles del blog i continguts originals publicats a <strong>Scriptum</strong> són propietat intel·lectual de <strong>Jordi Alcalde</strong> (© {currentYear} Jordi Alcalde — <em>Tots els drets reservats</em>), llevat que s'indiqui expressament una altra autoria.
+        </p>
+        <p>
+          Aquests continguts estan protegits per la legislació vigent en matèria de propietat intel·lectual i drets d'autor.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="font-display font-bold text-2xl text-[var(--text-primary)]">
+          2. Còpies, cites i distribució
+        </h2>
+        <p>
+          No es permet la reproducció total o parcial, la còpia, la distribució, la comunicació pública ni la transformació dels textos d'aquest lloc web —en cap suport ni format, amb finalitat comercial o sense— sense l'autorització prèvia i per escrit de l'autor.
+        </p>
+        <p>
+          <strong>Cites breus i enllaços:</strong> sí que es permet citar fragments breus amb finalitat informativa, crítica o de comentari, sempre que se citi clarament el nom de l'autor (<em>Jordi Alcalde</em>) i s'inclogui un enllaç directe a la pàgina original de Scriptum. També es pot compartir lliurement l'enllaç a qualsevol entrada o llibre.
+        </p>
+        <p>
+          Així mateix, no s'autoritza l'extracció massiva o automatitzada dels textos d'aquest web (<em>scraping</em>) ni la seva utilització per a l'entrenament de sistemes d'intel·ligència artificial sense consentiment exprés.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="font-display font-bold text-2xl text-[var(--text-primary)]">
+          3. Imatges i materials de tercers
+        </h2>
+        <p>
+          Les fotografies i il·lustracions que acompanyen els textos són d'arxiu personal de l'autor, de domini públic o s'utilitzen amb una finalitat estrictament il·lustrativa i cultural, sense cap ànim de lucre. Si qualsevol persona o entitat considera que alguna imatge o cita vulnera drets de tercers, pot comunicar-ho mitjançant el <a href="/contacte" class="text-[var(--accent)] hover:underline font-medium">formulari de contacte</a> i serà acreditada o retirada de manera immediata.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="font-display font-bold text-2xl text-[var(--text-primary)]">
+          4. Privacitat, galetes i emmagatzematge local
+        </h2>
+        <p>
+          <strong>Scriptum</strong> és un espai de lectura tranquil i respectuós: <strong>no utilitza galetes (<em>cookies</em>) de rastreig, ni publicitat, ni eines d'analítica invasives</strong>.
+        </p>
+        <p>
+          Per oferir una millor experiència de lectura, el web utilitza exclusivament l'emmagatzematge local del teu propi navegador (<code>localStorage</code>) per recordar les teves preferències visuals (mode <em>Paper</em>, <em>Sèpia</em> o <em>Nocturn</em>, i mida de lletra) així com el teu <strong>punt de llibre</strong> i els capítols o articles marcats com a llegits. Aquestes dades es queden únicament al teu dispositiu i no s'envien mai a cap servidor.
+        </p>
+        <p>
+          Si decideixes enviar un missatge a través del <a href="/contacte" class="text-[var(--accent)] hover:underline font-medium">formulari de contacte</a>, el teu nom i correu electrònic s'utilitzaran exclusivament per llegir i respondre la teva comunicació, i mai no es cediran a tercers ni es faran servir per a enviaments comercials.
+        </p>
+      </section>
+
+      <div class="scene-break">
+        <span>❦</span>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-[var(--card-bg)] border border-[var(--border-color)] font-sans text-xs text-[var(--text-muted)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <p class="!mb-0">
+          Per a sol·licituds de permís de reproducció, col·laboracions o qualsevol consulta sobre aquest avís:
+        </p>
+        <a
+          href="/contacte"
+          class="px-4 py-2 rounded-xl bg-[var(--accent)] text-white font-semibold shrink-0 hover:opacity-90 transition-opacity"
+        >
+          Contactar amb l'autor →
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

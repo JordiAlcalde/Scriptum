@@ -30,3 +30,9 @@ Apunts íntims sobre emocions, vivències personals i la manera com ens toca la 
 
 ## gent
 Relacions personals, conèixer com som i com són.
+
+## anècdotes
+Cosses que passen, curiositats.
+
+## pensaments
+Tot allò que va passant pel cap
