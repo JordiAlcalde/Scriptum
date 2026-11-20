@@ -72,7 +72,8 @@ Tots els fitxers `.md` d'aquell llibre han de tenir **exactament el mateix `llib
 | `etiqueta` | Opcional | Subtítol personalitzat (ex. `"Episodi 1"`, `"Interludi"`). Si no el poses, s'assigna sol segons `tipus`/`capitol` |
 | `estat` | Opcional | `"en-curs"` (per defecte) o `"acabat"`. N'hi ha prou de posar `estat: "acabat"` en un sol fitxer del llibre per marcar-lo com a **Obra completa** |
 | `portada` | Opcional | Ruta de la portada del llibre (ex. `"/imatges/portada-llibre.jpg"`). N'hi ha prou de posar-ho en un sol fitxer del llibre (recomanat format vertical 2:3 o 3:4) |
-| `sinopsi` | Opcional | Resum curt (la primera sinopsi del llibre es fa servir com a descripció del llibre) |
+| `descripcioLlibre` | Opcional | Descripció **global** del llibre (surt a la portada, a la biblioteca i a la capçalera de l'índex). N'hi ha prou de posar-la en un sol fitxer, així no es repeteix amb la `sinopsi` del Capítol 1 |
+| `sinopsi` | Opcional | Resum curt **d'aquest capítol o episodi concret** |
 | `tempsLectura` | Opcional | Es calcula **automàticament** (~200 paraules/minut) tant al blog com als llibres. Només cal posar-lo si vols forçar un valor manual |
 
 ---

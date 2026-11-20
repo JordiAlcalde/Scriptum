@@ -3,6 +3,7 @@ title: "Bajando al sur"
 description: Primer viaje a Luque, Córdoba, a conocer a la familia
 pubDate: 2013-08-24
 author: Jordi Alcalde
+image: "/imatges/luque.jpg"
 tags:
   - família
   - viatges

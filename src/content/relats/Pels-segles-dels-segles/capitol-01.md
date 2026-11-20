@@ -2,9 +2,10 @@
 title: "Començant a recordar"
 llibre: "Pels segles dels segles, amén"
 llibreId: "Pels-segles-dels-segles"
+descripcioLlibre: "Una peculiar mirada retrospectiva als meus 10 anys, allà pel 1968, sota l'óptica de les sotanes."
 capitol: 1
 data: 2016-08-01
-sinopsi: "Una peculiar mirada retrospectiva als meus 10 anys, allà pel 1968, sota l'óptica de les sotanes."
+sinopsi: "" 
 portada: "/imatges/segles_01.jpg"
 ---
 

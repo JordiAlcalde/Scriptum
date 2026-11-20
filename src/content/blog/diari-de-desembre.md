@@ -3,6 +3,7 @@ title: "Diari de desembre"
 description: Trenta dies del desembre de 2012
 pubDate: 2013-01-01
 author: Jordi Alcalde
+image: "/imatges/horitzontal.jpg"
 tags:
   - família
   - gent
