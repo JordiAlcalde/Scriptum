@@ -29,7 +29,7 @@ Cap pare vol que els seus fills l'hagin de cuidar quan no es puguin valdre. Són
 
 **_DIA 30_**
 
-Avui, 30 de Desembre de 2012, la Carme ens ha deixat després de 85 anys d'estar entre nosaltres, malgrat que la majoria no hem pogut gaudir de la seva presència durant tants llargs anys. Ha marxat silenciosament, discretament, sense fer soroll com ella sempre havia viscut.
+Avui, 30 de desembre de 2012, la Carme ens ha deixat després de 85 anys d'estar entre nosaltres, malgrat que la majoria no hem pogut gaudir de la seva presència durant tants llargs anys. Ha marxat silenciosament, discretament, sense fer soroll com ella sempre havia viscut.
 
 La seva generació, aquesta que ha sobreviscut a una guerra i ha hagut de malviure en una postguerra, ens ensenya que el sacrifici i la pròpia superació ens portaran sempre endavant. Nascuda en una família humil, des de massa jove havia treballat per portar el pa a taula. Un cop casada amb el seu estimat Joan, la feina no li va minvar sinó que, ben al contrari, tots dos van haver de treballar molt per aixecar el petit negoci familiar que tantes mans van cobrir amb els guants que cosia a tota hora mentre se n'ocupava també dels fills. Si s'escolta amb atenció, gairebé es pot sentir a hores d'ara per la casa el repicar de la maquina de cosir, tibant del fils per embastar la pell.
 
