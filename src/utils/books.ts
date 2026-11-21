@@ -18,6 +18,7 @@ export interface BookGroup {
   isSerialized: boolean;
   dateSummary: string;
   anyPublicacio: string;
+  sortTimestamp: number;
   portada?: string;
 }
 
@@ -211,6 +212,7 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
     const isSerialized = isBookSerialized(items, estat);
     const dateSummary = getBookDateSummary(items, estat, isSerialized);
     const anyPublicacio = items[0] ? String(items[0].data.data.getUTCFullYear()) : '2026';
+    const sortTimestamp = items[0] ? items[0].data.data.valueOf() : 0;
 
     return {
       id,
@@ -224,7 +226,8 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
       isSerialized,
       dateSummary,
       anyPublicacio,
+      sortTimestamp,
       portada: firstWithPortada?.data.portada?.trim(),
     };
-  });
+  }).sort((a, b) => b.sortTimestamp - a.sortTimestamp);
 }

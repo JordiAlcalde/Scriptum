@@ -22,22 +22,133 @@ const booksList = groupBooks(allRelats);
       </p>
     </header>
 
-    <div class="grid grid-cols-1 gap-6">
+    {booksList.length > 1 && (
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span class="text-xs font-mono uppercase tracking-wider text-[var(--text-muted)]">
+          Ordenar obres ({booksList.length})
+        </span>
+
+        <div
+          id="books-sort-controls"
+          class="flex items-center gap-2 flex-wrap"
+          role="group"
+          aria-label="Ordenar llibres"
+        >
+          <button
+            type="button"
+            data-sort="date-desc"
+            class="book-sort-btn text-xs font-mono px-3 py-1.5 rounded-full border transition-all cursor-pointer bg-[var(--accent)] text-white border-[var(--accent)] font-semibold"
+          >
+            Data ↓ (més recents)
+          </button>
+          <button
+            type="button"
+            data-sort="date-asc"
+            class="book-sort-btn text-xs font-mono px-3 py-1.5 rounded-full border transition-all cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            Data ↑ (més antics)
+          </button>
+          <button
+            type="button"
+            data-sort="title-asc"
+            class="book-sort-btn text-xs font-mono px-3 py-1.5 rounded-full border transition-all cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            Títol A–Z
+          </button>
+          <button
+            type="button"
+            data-sort="title-desc"
+            class="book-sort-btn text-xs font-mono px-3 py-1.5 rounded-full border transition-all cursor-pointer bg-[var(--card-bg)] text-[var(--text-muted)] border-[var(--border-color)] hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            Títol Z–A
+          </button>
+        </div>
+      </div>
+    )}
+
+    <div id="books-list" class="grid grid-cols-1 gap-6">
       {booksList.map((book) => (
-        <BookCard
-          llibreId={book.id}
-          titol={book.titol}
-          sinopsi={book.sinopsi}
-          totalCapitols={book.readingCount}
-          countLabel={book.countLabel}
-          firstSlug={book.firstSlug}
-          estat={book.estat}
-          dateSummary={book.dateSummary}
-          anyPublicacio={book.anyPublicacio}
-          portada={book.portada}
-        />
+        <div
+          data-book-item
+          data-title={book.titol}
+          data-date={book.sortTimestamp}
+        >
+          <BookCard
+            llibreId={book.id}
+            titol={book.titol}
+            sinopsi={book.sinopsi}
+            totalCapitols={book.readingCount}
+            countLabel={book.countLabel}
+            firstSlug={book.firstSlug}
+            estat={book.estat}
+            dateSummary={book.dateSummary}
+            anyPublicacio={book.anyPublicacio}
+            portada={book.portada}
+          />
+        </div>
       ))}
     </div>
   </div>
 </BaseLayout>
 
+<script>
+  const SORT_KEY = 'scriptum-books-sort';
+  const listEl = document.getElementById('books-list');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.book-sort-btn');
+
+  function applySort(mode: string) {
+    if (!listEl) return;
+    const items = Array.from(listEl.querySelectorAll<HTMLElement>('[data-book-item]'));
+
+    items.sort((a, b) => {
+      const titleA = a.dataset.title || '';
+      const titleB = b.dataset.title || '';
+      const dateA = Number(a.dataset.date || '0');
+      const dateB = Number(b.dataset.date || '0');
+
+      switch (mode) {
+        case 'date-asc':
+          return dateA - dateB || titleA.localeCompare(titleB, 'ca', { sensitivity: 'base' });
+        case 'title-asc':
+          return titleA.localeCompare(titleB, 'ca', { sensitivity: 'base' });
+        case 'title-desc':
+          return titleB.localeCompare(titleA, 'ca', { sensitivity: 'base' });
+        case 'date-desc':
+        default:
+          return dateB - dateA || titleA.localeCompare(titleB, 'ca', { sensitivity: 'base' });
+      }
+    });
+
+    items.forEach((item) => listEl.appendChild(item));
+
+    buttons.forEach((btn) => {
+      const isActive = btn.dataset.sort === mode;
+      if (isActive) {
+        btn.classList.add('bg-[var(--accent)]', 'text-white', 'border-[var(--accent)]', 'font-semibold');
+        btn.classList.remove('bg-[var(--card-bg)]', 'text-[var(--text-muted)]', 'border-[var(--border-color)]');
+      } else {
+        btn.classList.remove('bg-[var(--accent)]', 'text-white', 'border-[var(--accent)]', 'font-semibold');
+        btn.classList.add('bg-[var(--card-bg)]', 'text-[var(--text-muted)]', 'border-[var(--border-color)]');
+      }
+    });
+
+    try {
+      localStorage.setItem(SORT_KEY, mode);
+    } catch {}
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.sort || 'date-desc';
+      applySort(mode);
+    });
+  });
+
+  // Restaura l'últim ordre escollit pel lector
+  try {
+    const saved = localStorage.getItem(SORT_KEY);
+    if (saved && ['date-desc', 'date-asc', 'title-asc', 'title-desc'].includes(saved)) {
+      applySort(saved);
+    }
+  } catch {}
+</script>
