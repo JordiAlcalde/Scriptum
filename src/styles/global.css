@@ -126,6 +126,20 @@
   border: 1px solid var(--border-color);
 }
 
+/* Separador ornamental sense filet ni vores */
+.prose-literaria img.img-separador,
+.prose-blank-page img.img-separador {
+  border: none;
+  border-radius: 0;
+  margin: 2.25rem auto;
+  box-shadow: none;
+}
+
+body[data-theme="nocturn"] .prose-literaria img.img-separador,
+body[data-theme="nocturn"] .prose-blank-page img.img-separador {
+  filter: invert(0.8);
+}
+
 /* Imatges amb text al voltant (en mòbil queden centrades; en pantalla mitjana/gran floten) */
 @media (min-width: 640px) {
   .prose-literaria img.img-esquerra {
