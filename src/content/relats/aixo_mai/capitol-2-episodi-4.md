@@ -6,7 +6,7 @@ seccio: "Capítol futur"
 etiqueta: "Episodi 4"
 ordre: 15
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "La calma d'un cafè parisenc lluny del brogit, un diari compartit i el vi blanc que acompanya la felicitat reposada de qui ja no ha de demostrar res." 
 ---
 <img src="/imatges/aixo_mai_capitol_02_episodi_04.png" alt="El viatge desitjat" style="width: 100%;" />
 

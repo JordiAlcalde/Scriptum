@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 7"
 ordre: 8
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Una carretera buida de matinada i una casa que despulla les pors sense necessitat d'artificis. La pell reconeix el seu lloc amb un pacte silenciós." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_07.png" alt="El secret dels tres petons" style="width: 100%;" />
 

@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 3"
 ordre: 4
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Una casa que brolla vida, corredisses i mirades còmplices entre el caos quotidià. I entre tots ells, uns ulls de gos que trien fidelitat per a tota la vida." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_03.png" alt="Quatre gossos" style="width: 100%;" />
 

@@ -6,7 +6,7 @@ seccio: "Capítol futur"
 etiqueta: "Episodi 2"
 ordre: 13
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Les arrels d'una casa pairal que es van negar a caure sota l'asfalt. Un arbre centenari i una pluja de fulles que uneixen passat, art i família." 
 ---
 <img src="/imatges/aixo_mai_capitol_02_episodi_02.png" alt="Plouen fulles d'olivera" style="width: 100%;" />
 

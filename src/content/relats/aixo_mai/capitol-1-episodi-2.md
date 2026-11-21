@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 2"
 ordre: 3
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Les cicatrius d'una vella ruptura i el refugi en la solitud d'un taller. De vegades, una trucada aparentment banal fa trontollar tots els murs de contenció." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_02.png" alt="Les ferides del passat" style="width: 100%;" />
 

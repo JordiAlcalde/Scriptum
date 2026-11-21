@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 4"
 ordre: 5
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Les xafarderies d'un poble petit sovint fabriquen monstres on només hi ha coratge. Una dona que protegeix el seu món abans de sortir a sopar." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_04.png" alt="La forastera" style="width: 100%;" />
 

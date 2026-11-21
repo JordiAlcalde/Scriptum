@@ -6,7 +6,7 @@ seccio: "Capítol futur"
 etiqueta: "Episodi 1"
 ordre: 12
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Enmig de pantalles, llapis i la discussió habitual de dos germans, s'acosta una data assenyalada. Com es pot encapsular una vida sencera en un sol regal?" 
 ---
 <img src="/imatges/aixo_mai_capitol_02_episodi_01.png" alt="L'univers de DigitArt" style="width: 100%;" />
 

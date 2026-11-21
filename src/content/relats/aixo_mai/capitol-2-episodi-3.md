@@ -6,7 +6,7 @@ seccio: "Capítol futur"
 etiqueta: "Episodi 3"
 ordre: 14
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Un trasllat inevitable, caixes per obrir i noves manies que construeixen una llar. Adaptar-se a una altra etapa també vol dir saber quan deixar l'escombra." 
 ---
 <img src="/imatges/aixo_mai_capitol_02_episodi_03.png" alt="Canvi d'aires" style="width: 100%;" />
 

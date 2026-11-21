@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 6"
 ordre: 7
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "El fred de la nit s'esvaeix quan cap dels dos té pressa per tornar a casa. Un ritme de paraules accelerat que delata tot allò que encara no s'han dit." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_06.png" alt="Fem la copa a Wiset" style="width: 100%;" />
 

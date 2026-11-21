@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 5"
 ordre: 6
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Al caliu d'una taula de Blanford, les converses desenterren confidències, vells oficis i complicitats adormides que comencen a pesar més que la prudència." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_05.png" alt="Un sopar per xerrar" style="width: 100%;" />
 

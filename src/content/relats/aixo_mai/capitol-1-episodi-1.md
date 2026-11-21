@@ -6,7 +6,7 @@ seccio: "Capítol passat"
 etiqueta: "Episodi 1"
 ordre: 2
 data: 2016-08-01
-sinopsi: "" 
+sinopsi: "Una carretera solitària a través de la boira d'hivern i el retrobament amb algú que fa tres anys que no veu. Un cop de timbre que obrirà una porta del tot inesperada." 
 ---
 <img src="/imatges/aixo_mai_capitol_01_episodi_01.png" alt="Endinsats a la boira" style="width: 100%;" />
 
