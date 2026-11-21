@@ -4,6 +4,7 @@ import { estimateReadingTime } from './readingTime';
 export type RelatEntry = CollectionEntry<'relats'>;
 export type RelatTipus = RelatEntry['data']['tipus'];
 export type BookStatus = 'en-curs' | 'acabat';
+export type BookPublicationMode = 'completa' | 'entregues';
 
 export interface BookGroup {
   id: string;
@@ -14,7 +15,20 @@ export interface BookGroup {
   readingCount: number;
   countLabel: string;
   estat: BookStatus;
+  isSerialized: boolean;
+  dateSummary: string;
+  anyPublicacio: string;
   portada?: string;
+}
+
+/**
+ * Formata una data en format dd-mm-aaaa usant UTC per evitar desfasaments horaris.
+ */
+export function formatDateDMY(date: Date): string {
+  const d = String(date.getUTCDate()).padStart(2, '0');
+  const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+  const y = date.getUTCFullYear();
+  return `${d}-${m}-${y}`;
 }
 
 export interface BookSectionBlock {
@@ -122,6 +136,43 @@ export function getBookStatus(items: RelatEntry[]): BookStatus {
 }
 
 /**
+ * Determina si un llibre es publica/s'ha publicat per entregues (mostra data d'inici/final
+ * i data pròpia a cada capítol) o bé és una edició única ja acabada abans d'Scriptum.
+ */
+export function isBookSerialized(items: RelatEntry[], estat: BookStatus): boolean {
+  if (items.some((i) => i.data.publicacio === 'completa')) return false;
+  if (items.some((i) => i.data.publicacio === 'entregues')) return true;
+  return estat === 'en-curs';
+}
+
+/**
+ * Genera el text resum de dates del llibre per a la fitxa de biblioteca i l'índex.
+ */
+export function getBookDateSummary(
+  sortedItems: RelatEntry[],
+  estat: BookStatus,
+  isSerialized: boolean
+): string {
+  if (sortedItems.length === 0) return '';
+
+  const firstDate = formatDateDMY(sortedItems[0].data.data);
+
+  if (!isSerialized) {
+    return `Edició: ${firstDate}`;
+  }
+
+  if (estat === 'acabat') {
+    const lastDateObj = sortedItems.reduce(
+      (latest, item) => (item.data.data.valueOf() > latest.valueOf() ? item.data.data : latest),
+      sortedItems[0].data.data
+    );
+    return `Data d'inici: ${firstDate} · Data final: ${formatDateDMY(lastDateObj)}`;
+  }
+
+  return `Data d'inici: ${firstDate}`;
+}
+
+/**
  * Agrupa tota la col·lecció `relats` per llibre, amb ordre, primer slug i comptador intel·ligent.
  */
 export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
@@ -156,6 +207,11 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
         ? 'capítol'
         : 'capítols';
 
+    const estat = getBookStatus(items);
+    const isSerialized = isBookSerialized(items, estat);
+    const dateSummary = getBookDateSummary(items, estat, isSerialized);
+    const anyPublicacio = items[0] ? String(items[0].data.data.getUTCFullYear()) : '2026';
+
     return {
       id,
       titol,
@@ -164,7 +220,10 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
       firstSlug,
       readingCount,
       countLabel: `${readingCount} ${unit}`,
-      estat: getBookStatus(items),
+      estat,
+      isSerialized,
+      dateSummary,
+      anyPublicacio,
       portada: firstWithPortada?.data.portada?.trim(),
     };
   });

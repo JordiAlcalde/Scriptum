@@ -1,7 +1,15 @@
 ---
 import ReaderLayout from '../../../layouts/ReaderLayout.astro';
 import { getCollection } from 'astro:content';
-import { getBookStatus, getItemLabel, getItemReadingTime, getItemSlug, sortBookItems } from '../../../utils/books';
+import {
+  formatDateDMY,
+  getBookStatus,
+  getItemLabel,
+  getItemReadingTime,
+  getItemSlug,
+  isBookSerialized,
+  sortBookItems,
+} from '../../../utils/books';
 
 export async function getStaticPaths() {
   const allRelats = await getCollection('relats');
@@ -12,6 +20,7 @@ export async function getStaticPaths() {
   for (const bId of bookIds) {
     const items = sortBookItems(allRelats.filter((r) => r.data.llibreId === bId));
     const bookStatus = getBookStatus(items);
+    const isSerialized = isBookSerialized(items, bookStatus);
 
     items.forEach((item, idx) => {
       const itemSlug = getItemSlug(item);
@@ -24,6 +33,7 @@ export async function getStaticPaths() {
           chapter: item,
           itemSlug,
           itemLabel: getItemLabel(item),
+          itemDate: isSerialized ? formatDateDMY(item.data.data) : undefined,
           bookStatus,
           prevChapter: prevItem
             ? {
@@ -47,7 +57,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { chapter, itemSlug, itemLabel, bookStatus, prevChapter, nextChapter } = Astro.props;
+const { chapter, itemSlug, itemLabel, itemDate, bookStatus, prevChapter, nextChapter } = Astro.props;
 const { Content } = await chapter.render();
 ---
 
@@ -57,6 +67,7 @@ const { Content } = await chapter.render();
   llibreId={chapter.data.llibreId}
   itemSlug={itemSlug}
   itemLabel={itemLabel}
+  itemDate={itemDate}
   tipus={chapter.data.tipus}
   seccio={chapter.data.seccio}
   sinopsi={chapter.data.sinopsi}

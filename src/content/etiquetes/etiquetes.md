@@ -39,3 +39,6 @@ Tot allò que va passant pel cap
 
 ## animals
 Relacionat amb el món animal
+
+## distraccions
+Escrits per anar passant l'estona

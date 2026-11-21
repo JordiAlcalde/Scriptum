@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import ShareButton from '../../../components/ShareButton.astro';
 import { getCollection } from 'astro:content';
 import {
+  formatDateDMY,
   getItemLabel,
   getItemReadingTime,
   getItemSlug,
@@ -25,12 +26,14 @@ export async function getStaticPaths() {
       firstSlug: book.firstSlug,
       countLabel: book.countLabel,
       estat: book.estat,
+      isSerialized: book.isSerialized,
+      dateSummary: book.dateSummary,
       portada: book.portada,
     },
   }));
 }
 
-const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat, portada } = Astro.props;
+const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat, isSerialized, dateSummary, portada } = Astro.props;
 const sectionBlocks = groupItemsBySection(chapters);
 const hasSections = sectionBlocks.some((b) => b.seccio !== null);
 ---
@@ -81,6 +84,12 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
         <p class="font-serif text-base text-[var(--text-muted)] leading-relaxed">
           {sinopsi}
         </p>
+
+        {dateSummary && (
+          <p class="text-xs font-mono text-[var(--text-muted)]">
+            📅 {dateSummary}
+          </p>
+        )}
 
         <div class="pt-4 flex items-center gap-3 flex-wrap">
           {chapters.length > 0 && (
@@ -167,6 +176,12 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                     <div class="space-y-1">
                       <div class="flex items-center gap-2 text-xs font-mono text-[var(--accent)] flex-wrap">
                         <span>{label}</span>
+                        {isSerialized && (
+                          <>
+                            <span>·</span>
+                            <span class="text-[var(--text-muted)]">{formatDateDMY(item.data.data)}</span>
+                          </>
+                        )}
                         {readingTime && (
                           <>
                             <span>·</span>
