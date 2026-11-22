@@ -12,5 +12,5 @@ descripcioLlibre: "Cinc mesos exactes després de la mort de la seva dona, l'aut
 
 <div style="margin: 2rem 0 1.75rem;">
   <h2 style="font-size: 1.85rem; font-weight: 700; line-height: 1.2; margin: 0 0 0.6rem; text-align: left;">Cinc mesos vius</h2>
-  <p style="font-size: 0.95rem; font-style: italic; line-height: 1.55; margin: 0; text-align: left; color: var(--text-muted);">“[temps] vius”. Expressió catalana en desús que indica un<br>període exacte de temps, que ha passat o que ha de passar.</p>
+  <p style="font-size: 0.95rem; font-style: italic; line-height: 1.55; margin: 0; text-align: left; color: var(--text-muted);">“[temps] vius”. Expressió catalana en desús que indica<br>un període exacte de temps, que ha passat o que ha de passar.</p>
 </div>

@@ -12,7 +12,8 @@ Aquesta guia recull totes les plantilles i normes per escriure articles de blog,
    ```markdown
    ![Descripció de la imatge](/imatges/foto.jpg)
    ```
-5. **Publicar al web (`https://scriptum.minimmon.cat`):** desa els fitxers, obre **GitHub Desktop**, escriu un resum curt del canvi → **Commit to main** → **Push origin**. En ~1 minut serà online.
+5. **Mode esborrany (`esborrany: true`):** afegeix `esborrany: true` a la capçalera de qualsevol article o capítol que encara estiguis editant. El continuaràs veient en local (`localhost:4321`) amb una etiqueta **📝 Esborrany**, però **no es publicarà mai** a `scriptum.minimmon.cat` fins que treguis aquesta línia.
+6. **Publicar al web (`https://scriptum.minimmon.cat`):** desa els fitxers, obre **GitHub Desktop**, escriu un resum curt del canvi → **Commit to main** → **Push origin**. En ~1 minut serà online.
 
 ---
 
@@ -35,6 +36,8 @@ Aquí comença el cos de l'article...
 ```
 
 > **Miniatura de la fitxa del blog:** el camp `image` és opcional. Si l'afegeixes, mostrarà una miniatura panoràmica (16:9) a la fitxa de l'article (al Blog, als filtres d'etiquetes i a la portada), i pots tornar a posar la mateixa imatge dins del text allà on vulguis.
+
+> **Seccions i notes al peu al blog:** si divideixes un article en apartats amb `## Títol de secció` (2 o més), Scriptum genera automàticament un **índex clicable** a dalt de l'article. Les notes al peu de Zettlr (`[^1]`) es formaten automàticament com *Notes i referències*, obren tots els enllaços externs en **pestanya nova** i hi afegeixen sola la icona de **YouTube** (si és un vídeo de YouTube) o de **llibre obert** (si és una lectura externa).
 
 ---
 

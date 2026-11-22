@@ -10,6 +10,7 @@ const blogCollection = defineCollection({
     tags: z.array(z.string()).default([]),
     image: z.string().optional(),
     featured: z.boolean().default(false),
+    esborrany: z.boolean().default(false),
   }),
 });
 
@@ -33,6 +34,7 @@ const relatsCollection = defineCollection({
     data: z.date(),
     sinopsi: z.string().optional(),
     tempsLectura: z.string().optional(),
+    esborrany: z.boolean().default(false),
   }),
 });
 

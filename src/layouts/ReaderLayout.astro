@@ -22,6 +22,7 @@ interface Props {
   sinopsi?: string;
   tempsLectura?: string;
   bookStatus?: BookStatus;
+  esborrany?: boolean;
   prevChapter?: NavTarget | null;
   nextChapter?: NavTarget | null;
 }
@@ -38,6 +39,7 @@ const {
   sinopsi,
   tempsLectura,
   bookStatus = 'en-curs',
+  esborrany = false,
   prevChapter,
   nextChapter,
 } = Astro.props;
@@ -52,6 +54,11 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
 
   <!-- Espai de Lectura Editorial -->
   <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    {esborrany && (
+      <div class="mb-8 px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-600/30 text-amber-800 text-xs font-mono text-center font-semibold">
+        📝 ESBORRANY — Només visible en local; no es publicarà al web fins que treguis esborrany: true
+      </div>
+    )}
     {isBlank ? (
       <!-- Pàgina en blanc editorial: Dedicatòria o Epígraf / Frase aïllada -->
       <div class="min-h-[52vh] flex flex-col items-center justify-center text-center py-12 sm:py-20 space-y-8">

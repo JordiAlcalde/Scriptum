@@ -10,9 +10,10 @@ import {
   isBookSerialized,
   sortBookItems,
 } from '../../../utils/books';
+import { isVisibleEntry } from '../../../utils/drafts';
 
 export async function getStaticPaths() {
-  const allRelats = await getCollection('relats');
+  const allRelats = await getCollection('relats', isVisibleEntry);
   const bookIds = Array.from(new Set(allRelats.map((r) => r.data.llibreId)));
 
   const paths = [];
@@ -73,6 +74,7 @@ const { Content } = await chapter.render();
   sinopsi={chapter.data.sinopsi}
   tempsLectura={getItemReadingTime(chapter)}
   bookStatus={bookStatus}
+  esborrany={chapter.data.esborrany}
   prevChapter={prevChapter}
   nextChapter={nextChapter}
 >

@@ -9,9 +9,10 @@ interface Props {
   tags?: string[];
   image?: string;
   readingTime?: string;
+  esborrany?: boolean;
 }
 
-const { slug, title, description, pubDate, tags = [], image, readingTime = '4 min' } = Astro.props;
+const { slug, title, description, pubDate, tags = [], image, readingTime = '4 min', esborrany = false } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   day: 'numeric',
@@ -42,6 +43,11 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
     <div class="flex items-center justify-between gap-2 text-xs font-mono text-[var(--text-muted)]">
       <time datetime={pubDate.toISOString()}>{formattedDate}</time>
       <div class="flex items-center gap-2">
+        {esborrany && (
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 border border-amber-600/30 font-semibold">
+            📝 Esborrany
+          </span>
+        )}
         <span
           data-post-read-badge
           class="hidden text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-600/20"

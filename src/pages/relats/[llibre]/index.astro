@@ -11,9 +11,10 @@ import {
   groupItemsBySection,
   isBlankPageType,
 } from '../../../utils/books';
+import { isVisibleEntry } from '../../../utils/drafts';
 
 export async function getStaticPaths() {
-  const allRelats = await getCollection('relats');
+  const allRelats = await getCollection('relats', isVisibleEntry);
   const books = groupBooks(allRelats);
 
   return books.map((book) => ({
@@ -155,6 +156,11 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                       <span class="font-serif italic text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors truncate">
                         {item.data.title}
                       </span>
+                      {item.data.esborrany && (
+                        <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 border border-amber-600/30 font-semibold">
+                          📝 Esborrany
+                        </span>
+                      )}
                       <span data-bookmark-badge class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] font-semibold">
                         🔖 Punt de llibre
                       </span>
@@ -187,6 +193,11 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
                             <span>·</span>
                             <span class="text-[var(--text-muted)]">{readingTime}</span>
                           </>
+                        )}
+                        {item.data.esborrany && (
+                          <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 border border-amber-600/30 font-semibold">
+                            📝 Esborrany
+                          </span>
                         )}
                         <span data-bookmark-badge class="hidden text-[10px] px-2 py-0.5 rounded-full bg-[var(--accent)]/15 text-[var(--accent)] font-semibold">
                           🔖 Punt de llibre

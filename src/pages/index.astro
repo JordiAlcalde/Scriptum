@@ -5,10 +5,11 @@ import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 import { groupBooks } from '../utils/books';
 import { estimateReadingTime } from '../utils/readingTime';
+import { isVisibleEntry } from '../utils/drafts';
 
-// Obtenir relats i agrupar per llibre
-const allRelats = await getCollection('relats');
-const allPosts = await getCollection('blog');
+// Obtenir relats i agrupar per llibre (filtrant esborranys en producció)
+const allRelats = await getCollection('relats', isVisibleEntry);
+const allPosts = await getCollection('blog', isVisibleEntry);
 
 const booksList = groupBooks(allRelats);
 const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
@@ -107,6 +108,7 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
           tags={post.data.tags}
           image={post.data.image}
           readingTime={estimateReadingTime(post.body)}
+          esborrany={post.data.esborrany}
         />
       ))}
     </div>

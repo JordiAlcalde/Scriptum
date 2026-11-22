@@ -3,8 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BookCard from '../../components/BookCard.astro';
 import { getCollection } from 'astro:content';
 import { groupBooks } from '../../utils/books';
+import { isVisibleEntry } from '../../utils/drafts';
 
-const allRelats = await getCollection('relats');
+const allRelats = await getCollection('relats', isVisibleEntry);
 const booksList = groupBooks(allRelats);
 ---
 

@@ -2,9 +2,10 @@
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 import { getCollection } from 'astro:content';
 import { estimateReadingTime } from '../../utils/readingTime';
+import { isVisibleEntry } from '../../utils/drafts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', isVisibleEntry);
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: { post }
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 ---
 
 <BlogPostLayout
@@ -22,7 +23,9 @@ const { Content } = await post.render();
   pubDate={post.data.pubDate}
   author={post.data.author}
   tags={post.data.tags}
+  headings={headings}
   readingTime={estimateReadingTime(post.body)}
+  esborrany={post.data.esborrany}
 >
   <Content />
 </BlogPostLayout>
