@@ -178,14 +178,16 @@
 }
 
 /* Enllaços externs decorats automàticament (YouTube / Llibre) */
-.prose-literaria a.ext-link-styled {
+.prose-literaria a.ext-link-styled,
+.prose-blank-page a.ext-link-styled {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   vertical-align: baseline;
 }
 
-.prose-literaria a.ext-link-icon-only {
+.prose-literaria a.ext-link-icon-only,
+.prose-blank-page a.ext-link-icon-only {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -196,12 +198,14 @@
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
-.prose-literaria a.ext-link-icon-only:hover {
+.prose-literaria a.ext-link-icon-only:hover,
+.prose-blank-page a.ext-link-icon-only:hover {
   transform: scale(1.12);
   background-color: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-.prose-literaria .ext-link-icon {
+.prose-literaria .ext-link-icon,
+.prose-blank-page .ext-link-icon {
   display: inline-block;
   flex-shrink: 0;
   vertical-align: middle;

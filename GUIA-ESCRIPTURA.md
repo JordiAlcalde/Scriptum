@@ -254,3 +254,57 @@ Aquí comença el paràgraf que envoltarà la imatge...
 ```
 
 > **Recordatori:** totes les imatges queden centrades, amb vores arrodonides i adaptades automàticament a pantalles de mòbil. Quan enganxis aquests blocs a Zettlr, fes servir **`Ctrl + Shift + V`** (*text pla*).
+
+---
+
+## 5. Enllaços a YouTube, notes al peu i recursos tipogràfics
+
+### Enllaços a YouTube a qualsevol punt del text o peu de foto
+Qualsevol enllaç a YouTube (`youtube.com` o `youtu.be`) dins d'un article del blog o d'un llibre s'obre automàticament en **pestanya nova** i mostra el **logo vermell de YouTube**:
+
+- **Només la icona (l'adreça queda amagada dins la icona):**
+  ```markdown
+  Sonava de fons la versió de Paco Ibáñez https://www.youtube.com/watch?v=...
+  ```
+- **Icona + text clicable:**
+  ```markdown
+  [Andaluces de Jaén — Paco Ibáñez](https://www.youtube.com/watch?v=...)
+  ```
+- **Dins el peu de foto d'una imatge:**
+  ```html
+  <figure style="text-align: center; margin: 2rem auto;">
+    <img src="/imatges/foto.jpg" alt="Descripció" width="420" style="margin-bottom: 0.5rem;" />
+    <figcaption style="font-size: 0.85rem; opacity: 0.8; font-style: italic;">
+      Paco Ibáñez cantant Miguel Hernández <a href="https://www.youtube.com/watch?v=...">https://www.youtube.com/watch?v=...</a>
+    </figcaption>
+  </figure>
+  ```
+
+### Notes al peu de pàgina (amb l'eina de Zettlr `[^1]`)
+- Al text poses `[^1]` i al final del fitxer `[^1]: Text explicatiu https://...`.
+- Scriptum crea automàticament l'apartat **Notes i referències**, afegeix la icona de **YouTube** o de **llibre obert** (amagant la URL si l'has posat directa) i inclou la fletxa de retorn al paràgraf (`Tornar`).
+
+### Separador ornamental i imatges transparents sense filet
+```html
+<img src="/imatges/separador.png" alt="Separador" class="img-separador" />
+```
+*(Deixa sempre una línia en blanc a dalt i a baix. També s'adapta automàticament al mode Nocturn.)*
+
+### Bloc sagnat en cursiva (dietari, carta o cita llarga)
+```html
+<div style="margin: 1.5rem 0 1.5rem 2.25rem; font-style: italic;">
+
+Primer paràgraf en cursiva...
+
+Segon paràgraf en cursiva...
+
+</div>
+```
+
+### Diàlegs literaris (estil llibre imprès)
+Fes servir la ratlla llarga **`—`** (mai `- ` per evitar llistes), **`&emsp;`** per al sagnat inicial i **`\`** al final de cada línia si vols les intervencions juntes sense espai extra entremig:
+```markdown
+Li va demanar:\
+&emsp;—Et puc dir una cosa?\
+&emsp;—Digues el que vulguis —li contestà.
+```

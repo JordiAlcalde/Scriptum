@@ -6,13 +6,24 @@ import { isVisibleEntry } from '../../utils/drafts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', isVisibleEntry);
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post }
-  }));
+  const sortedPosts = [...posts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+  return sortedPosts.map((post, idx) => {
+    const newerPost = idx > 0 ? sortedPosts[idx - 1] : null;
+    const olderPost = idx < sortedPosts.length - 1 ? sortedPosts[idx + 1] : null;
+
+    return {
+      params: { slug: post.slug },
+      props: {
+        post,
+        prevPost: olderPost ? { title: olderPost.data.title, slug: olderPost.slug } : null,
+        nextPost: newerPost ? { title: newerPost.data.title, slug: newerPost.slug } : null,
+      },
+    };
+  });
 }
 
-const { post } = Astro.props;
+const { post, prevPost, nextPost } = Astro.props;
 const { Content, headings } = await post.render();
 ---
 
@@ -26,6 +37,8 @@ const { Content, headings } = await post.render();
   headings={headings}
   readingTime={estimateReadingTime(post.body)}
   esborrany={post.data.esborrany}
+  prevPost={prevPost}
+  nextPost={nextPost}
 >
   <Content />
 </BlogPostLayout>

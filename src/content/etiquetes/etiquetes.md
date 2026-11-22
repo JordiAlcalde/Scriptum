@@ -42,3 +42,6 @@ Relacionat amb el món animal
 
 ## distraccions
 Escrits per anar passant l'estona
+
+## tecnologia
+Relacionat amb la tecnologi, antiga, actual i futura.

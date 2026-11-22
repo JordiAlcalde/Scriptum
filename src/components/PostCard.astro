@@ -41,22 +41,17 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
     )}
 
     <div class="flex items-center justify-between gap-2 text-xs font-mono text-[var(--text-muted)]">
-      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-      <div class="flex items-center gap-2">
-        {esborrany && (
-          <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 border border-amber-600/30 font-semibold">
-            📝 Esborrany
-          </span>
-        )}
-        <span
-          data-post-read-badge
-          class="hidden text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-600/20"
-        >
-          ✓ Llegit
-        </span>
-        <span>{readingTime} de lectura</span>
-      </div>
+      <time datetime={pubDate.toISOString()} class="whitespace-nowrap">{formattedDate}</time>
+      <span class="whitespace-nowrap">{readingTime} de lectura</span>
     </div>
+
+    {esborrany && (
+      <div>
+        <span class="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-700 border border-amber-600/30 font-semibold">
+          📝 Esborrany
+        </span>
+      </div>
+    )}
 
     <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
       <a href={`/blog/${slug}`}>
@@ -82,10 +77,11 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
     </div>
 
     <a
+      data-post-cta
       href={`/blog/${slug}`}
       class="text-xs font-sans font-semibold text-[var(--accent)] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1 shrink-0"
     >
-      <span>Llegir</span>
+      <span data-post-cta-text>Llegir</span>
       <span>→</span>
     </a>
   </div>
@@ -98,8 +94,11 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
     const slug = card.dataset.postCard;
     if (!slug) return;
     if (isBlogPostRead(slug)) {
-      const badge = card.querySelector<HTMLElement>('[data-post-read-badge]');
-      badge?.classList.remove('hidden');
+      const cta = card.querySelector<HTMLElement>('[data-post-cta]');
+      const ctaText = card.querySelector<HTMLElement>('[data-post-cta-text]');
+      if (ctaText) ctaText.textContent = '✓ Llegit';
+      cta?.classList.remove('text-[var(--accent)]');
+      cta?.classList.add('text-emerald-700');
     }
   });
 </script>
