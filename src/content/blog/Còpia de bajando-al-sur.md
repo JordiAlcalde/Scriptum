@@ -52,7 +52,7 @@ Unas señales de tráfico indicaban la dirección y la distancia hasta Puente Ge
 En el viaje de ida, estando ya próximos a Luque, otro cartel indicaba el camino a Cabra. Enseguida me vino a la mente que un famoso ciclista de los años setenta del siglo pasado, Joaquín Galera, era oriundo de esta localidad. A la mañana siguiente descubrí mi error, pues nació en Baúl, un pueblo de Granada del que nunca oí mencionar. Pero los azares (o tal vez los algoritmos) de la tecnología quisieron que el segundo resultado de la búsqueda relacionase a Galera con Antonio Gómez del Moral, otro ciclista de la misma época, en la disputa de una etapa de la Vuelta Ciclista a España que transcurría por sus respectivos pueblos natales. Gómez del Moral nació en Cabra. Círculo cerrado. Pero, ¿por qué mis ficheros neuronales tenían esa información errática? Sin que haya forma de confirmarlo puesto que mis padres hace tiempo que abandonaron estas estancias, me atrevería a decir que el propio Antonio Gómez del Moral había estado en nuestra casa para comprar los guantes con los que mis padres se ganaron la vida. Hasta aquí el ejercicio de suposición.
 
 Tomelloso me recordaba a alguna de las andanzas de Don Quijote pero parece ser que el ilustre hidalgo no cabalgó por ahí. 
-En Valdepeñas todo habla de vino. 
+En Valdepeñas todo habla de vino, siempre. 
 Las Tablas de Daimiel aparecían en los libros de geografía y ahora he descubierto que se trata de un Parque Nacional. 
 La Carolina sonaba a explosivos pero resultó tener solo un pasado minero. 
 Martos es un pueblo de Jaén y también el apellido de Raphael, el octogenario cantante que nació en Linares. 
