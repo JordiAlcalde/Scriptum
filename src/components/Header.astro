@@ -284,9 +284,25 @@ const currentPath = Astro.url.pathname;
     document.body.appendChild(script);
   }
 
+  /**
+   * Evita que Google Translate tradueixi articles o relats quan ja estan escrits
+   * originalment en el mateix idioma seleccionat (p. ex. original `es` amb selector `ES`).
+   */
+  function syncOriginalLangProtection(targetLang: 'ca' | 'es' | 'en') {
+    document.querySelectorAll<HTMLElement>('[data-original-lang]').forEach((el) => {
+      const orig = (el.dataset.originalLang || '').toLowerCase();
+      if (orig && orig === targetLang) {
+        el.classList.add('notranslate');
+      } else {
+        el.classList.remove('notranslate');
+      }
+    });
+  }
+
   function applyLanguage(lang: 'ca' | 'es' | 'en') {
     setGoogTransCookie(lang);
     updateLangButtons(lang);
+    syncOriginalLangProtection(lang);
 
     if (lang === 'ca') {
       window.location.reload();
@@ -315,6 +331,7 @@ const currentPath = Astro.url.pathname;
   // Inicialització d'idioma en carregar la pàgina
   const initialLang = getActiveLang();
   updateLangButtons(initialLang);
+  syncOriginalLangProtection(initialLang);
   if (initialLang !== 'ca') {
     loadGoogleTranslate();
   }

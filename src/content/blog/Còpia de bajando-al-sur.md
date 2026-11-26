@@ -3,6 +3,7 @@ title: "Bajando al sur (II)"
 description: Segundo viaje a Luque (Córdoba) i primero a Berja (Almería)
 pubDate: 2026-04-24
 author: Jordi Alcalde
+idioma: es
 image: "/imatges/Bajando al sur_03.png"
 tags:
   - família

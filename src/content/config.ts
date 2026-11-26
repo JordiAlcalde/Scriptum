@@ -9,6 +9,11 @@ const blogCollection = defineCollection({
     author: z.string().default('Scriptum'),
     tags: z.array(z.string()).default([]),
     image: z.string().optional(),
+    idioma: z
+      .string()
+      .transform((v) => v.trim().toLowerCase())
+      .pipe(z.enum(['ca', 'es', 'en']))
+      .optional(),
     featured: z.boolean().default(false),
     esborrany: z.boolean().default(false),
   }),
@@ -23,7 +28,7 @@ const relatsCollection = defineCollection({
     capitol: z.number().optional(),
     ordre: z.number().optional(),
     tipus: z
-      .enum(['capitol', 'dedicatoria', 'epigraf', 'proleg', 'epileg', 'nota'])
+      .enum(['capitol', 'dedicatoria', 'epigraf', 'proleg', 'epileg', 'nota', 'poema'])
       .default('capitol'),
     seccio: z.string().optional(),
     etiqueta: z.string().optional(),
@@ -34,6 +39,11 @@ const relatsCollection = defineCollection({
     data: z.date(),
     sinopsi: z.string().optional(),
     tempsLectura: z.string().optional(),
+    idioma: z
+      .string()
+      .transform((v) => v.trim().toLowerCase())
+      .pipe(z.enum(['ca', 'es', 'en']))
+      .optional(),
     esborrany: z.boolean().default(false),
   }),
 });

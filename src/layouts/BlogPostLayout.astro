@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import ShareButton from '../components/ShareButton.astro';
 import { slugifyTag } from '../utils/tags';
+import { getLangBadge } from '../utils/lang';
 
 interface HeadingItem {
   depth: number;
@@ -23,6 +24,7 @@ interface Props {
   tags?: string[];
   headings?: HeadingItem[];
   readingTime?: string;
+  idioma?: string;
   esborrany?: boolean;
   prevPost?: NavPost | null;
   nextPost?: NavPost | null;
@@ -37,12 +39,14 @@ const {
   tags = [],
   headings = [],
   readingTime = '4 min',
+  idioma,
   esborrany = false,
   prevPost = null,
   nextPost = null,
 } = Astro.props;
 
 const sectionHeadings = headings.filter((h) => h.depth === 2 && h.slug !== 'footnote-label');
+const langBadge = getLangBadge(idioma);
 
 const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   day: 'numeric',
@@ -71,15 +75,25 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
         <span>Per {author}</span>
         <span>·</span>
         <span>⏱️ {readingTime} de lectura</span>
+        {langBadge && (
+          <span
+            title={langBadge.title}
+            class="notranslate text-[10px] font-mono font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[var(--accent)] text-white shadow-2xs"
+          >
+            {langBadge.code}
+          </span>
+        )}
       </div>
 
-      <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
-        {title}
-      </h1>
+      <div data-original-lang={langBadge?.lang} class="space-y-4">
+        <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
+          {title}
+        </h1>
 
-      <p class="text-base text-[var(--text-muted)] font-serif italic leading-relaxed">
-        {description}
-      </p>
+        <p class="text-base text-[var(--text-muted)] font-serif italic leading-relaxed">
+          {description}
+        </p>
+      </div>
 
       {tags.length > 0 && (
         <div class="flex items-center gap-2 pt-2 flex-wrap">
@@ -121,7 +135,7 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
       </nav>
     )}
 
-    <div class="prose-literaria">
+    <div data-original-lang={langBadge?.lang} class="prose-literaria">
       <slot />
     </div>
 

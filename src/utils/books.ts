@@ -19,6 +19,7 @@ export interface BookGroup {
   dateSummary: string;
   anyPublicacio: string;
   sortTimestamp: number;
+  idioma?: 'ca' | 'es' | 'en';
   portada?: string;
 }
 
@@ -94,6 +95,10 @@ export function getItemLabel(item: RelatEntry): string {
       return 'Epíleg';
     case 'nota':
       return 'Nota';
+    case 'poema':
+      return typeof item.data.capitol === 'number'
+        ? `Poema ${item.data.capitol}`
+        : 'Poema';
     default:
       return typeof item.data.capitol === 'number'
         ? `Capítol ${item.data.capitol}`
@@ -199,20 +204,26 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
 
     const readingItems = items.filter((i) => !isBlankPageType(i.data.tipus));
     const readingCount = readingItems.length || items.length;
+    const isPoetryBook = readingItems.length > 0 && readingItems.every((i) => i.data.tipus === 'poema');
     const hasSections = items.some((i) => Boolean(i.data.seccio?.trim()));
-    const unit = hasSections
+    const unit = isPoetryBook
       ? readingCount === 1
-        ? 'episodi'
-        : 'episodis'
-      : readingCount === 1
-        ? 'capítol'
-        : 'capítols';
+        ? 'poema'
+        : 'poemes'
+      : hasSections
+        ? readingCount === 1
+          ? 'episodi'
+          : 'episodis'
+        : readingCount === 1
+          ? 'capítol'
+          : 'capítols';
 
     const estat = getBookStatus(items);
     const isSerialized = isBookSerialized(items, estat);
     const dateSummary = getBookDateSummary(items, estat, isSerialized);
     const anyPublicacio = items[0] ? String(items[0].data.data.getUTCFullYear()) : '2026';
     const sortTimestamp = items[0] ? items[0].data.data.valueOf() : 0;
+    const firstNonCaLang = items.find((i) => i.data.idioma === 'es' || i.data.idioma === 'en')?.data.idioma;
 
     return {
       id,
@@ -227,6 +238,7 @@ export function groupBooks(allRelats: RelatEntry[]): BookGroup[] {
       dateSummary,
       anyPublicacio,
       sortTimestamp,
+      idioma: firstNonCaLang,
       portada: firstWithPortada?.data.portada?.trim(),
     };
   }).sort((a, b) => b.sortTimestamp - a.sortTimestamp);

@@ -38,6 +38,7 @@ const allTags = await getBlogTags(sortedPosts);
           tags={post.data.tags}
           image={post.data.image}
           readingTime={estimateReadingTime(post.body)}
+          idioma={post.data.idioma}
           esborrany={post.data.esborrany}
         />
       ))}

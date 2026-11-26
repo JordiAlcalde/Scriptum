@@ -13,7 +13,8 @@ Aquesta guia recull totes les plantilles i normes per escriure articles de blog,
    ![Descripció de la imatge](/imatges/foto.jpg)
    ```
 5. **Mode esborrany (`esborrany: true`):** afegeix `esborrany: true` a la capçalera de qualsevol article o capítol que encara estiguis editant. El continuaràs veient en local (`localhost:4321`) amb una etiqueta **📝 Esborrany**, però **no es publicarà mai** a `scriptum.minimmon.cat` fins que treguis aquesta línia.
-6. **Publicar al web (`https://scriptum.minimmon.cat`):** desa els fitxers, obre **GitHub Desktop**, escriu un resum curt del canvi → **Commit to main** → **Push origin**. En ~1 minut serà online.
+6. **Idioma original (`idioma: es` o `idioma: en`):** si un article o relat està escrit originalment en castellà o anglès, afegeix `idioma: es` (o `idioma: en`) a la capçalera. Mostrarà una píndola discreta **`ES`** / **`EN`** al costat del títol i **evitarà automàticament que el traductor el re-tradueixi** quan el lector seleccioni aquell mateix idioma. Per al català no cal posar res.
+7. **Publicar al web (`https://scriptum.minimmon.cat`):** desa els fitxers, obre **GitHub Desktop**, escriu un resum curt del canvi → **Commit to main** → **Push origin**. En ~1 minut serà online.
 
 ---
 
@@ -70,7 +71,7 @@ Tots els fitxers `.md` d'aquell llibre han de tenir **exactament el mateix `llib
 | `data` | **Sí** | Data en format `AAAA-MM-DD` |
 | `ordre` | Recomanat | Número que marca l'ordre exacte de lectura (`0`, `1`, `1.5`, `2`, `10`…) |
 | `capitol` | Opcional | Número de capítol (en llibres simples serveix d'ordre i etiqueta `Capítol X`) |
-| `tipus` | Opcional | Aspecte de la pàgina: `capitol` (per defecte), `dedicatoria`, `epigraf`, `proleg`, `epileg`, `nota` |
+| `tipus` | Opcional | Aspecte de la pàgina: `capitol` (per defecte), `poema` (alineat a l'esquerra, sense capitular i respectant cada salt de vers sense posar `\`), `dedicatoria`, `epigraf`, `proleg`, `epileg`, `nota` |
 | `seccio` | Opcional | Agrupa diversos episodis sota un encapçalament a l'índex (ex. `"Capítol I — El viatge"`) |
 | `etiqueta` | Opcional | Subtítol personalitzat (ex. `"Episodi 1"`, `"Interludi"`). Si no el poses, s'assigna sol segons `tipus`/`capitol` |
 | `estat` | Opcional | `"en-curs"` (per defecte) o `"acabat"`. N'hi ha prou de posar `estat: "acabat"` en un sol fitxer del llibre per marcar-lo com a **Obra completa** |
@@ -225,7 +226,7 @@ Desa sempre les imatges dins de `c:\Antigravity\Scriptum\public\imatges\` (sense
 ```html
 <img src="/imatges/foto.jpg" alt="Descripció de la imatge" style="width: 60%;" />
 ```
-
+![alt text](image.png)
 ### Imatge amb el text al voltant (esquerra o dreta)
 Posa aquesta línia abans del paràgraf que vols que envolti la imatge, **deixant sempre una línia en blanc entre la imatge i el paràgraf** (si no hi ha línia en blanc, Markdown tracta el paràgraf com a HTML i no aplica cursives ni marges):
 

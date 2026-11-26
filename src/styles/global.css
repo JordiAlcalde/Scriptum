@@ -61,6 +61,15 @@
   hyphens: auto;
 }
 
+/* Format de poesia: alineat a l'esquerra, sense guionets i respectant cada salt de vers */
+.prose-poema p {
+  text-align: left;
+  text-justify: auto;
+  hyphens: none;
+  white-space: pre-line;
+  margin-bottom: 1.6em;
+}
+
 /* Seccions i subtítols dins d'articles i capítols */
 .prose-literaria h2 {
   font-family: 'Playfair Display', serif;

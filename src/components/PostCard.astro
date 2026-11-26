@@ -1,5 +1,6 @@
 ---
 import { slugifyTag } from '../utils/tags';
+import { getLangBadge } from '../utils/lang';
 
 interface Props {
   slug: string;
@@ -9,10 +10,12 @@ interface Props {
   tags?: string[];
   image?: string;
   readingTime?: string;
+  idioma?: string;
   esborrany?: boolean;
 }
 
-const { slug, title, description, pubDate, tags = [], image, readingTime = '4 min', esborrany = false } = Astro.props;
+const { slug, title, description, pubDate, tags = [], image, readingTime = '4 min', idioma, esborrany = false } = Astro.props;
+const langBadge = getLangBadge(idioma);
 
 const formattedDate = new Intl.DateTimeFormat('ca-ES', {
   day: 'numeric',
@@ -53,15 +56,27 @@ const formattedDate = new Intl.DateTimeFormat('ca-ES', {
       </div>
     )}
 
-    <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
-      <a href={`/blog/${slug}`}>
-        {title}
-      </a>
-    </h3>
+    <div data-original-lang={langBadge?.lang} class="space-y-3">
+      <div class="flex items-start justify-between gap-2">
+        <h3 class="font-display font-bold text-xl text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors line-clamp-2">
+          <a href={`/blog/${slug}`}>
+            {title}
+          </a>
+        </h3>
+        {langBadge && (
+          <span
+            title={langBadge.title}
+            class="notranslate shrink-0 mt-1 text-[10px] font-mono font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[var(--accent)] text-white shadow-2xs"
+          >
+            {langBadge.code}
+          </span>
+        )}
+      </div>
 
-    <p class="text-sm text-[var(--text-muted)] line-clamp-3 leading-relaxed font-serif">
-      {description}
-    </p>
+      <p class="text-sm text-[var(--text-muted)] line-clamp-3 leading-relaxed font-serif">
+        {description}
+      </p>
+    </div>
   </div>
 
   <div class="pt-3 border-t border-[var(--border-color)] flex items-center justify-between gap-2">

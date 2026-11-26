@@ -12,6 +12,7 @@ import {
   isBlankPageType,
 } from '../../../utils/books';
 import { isVisibleEntry } from '../../../utils/drafts';
+import { getLangBadge } from '../../../utils/lang';
 
 export async function getStaticPaths() {
   const allRelats = await getCollection('relats', isVisibleEntry);
@@ -29,14 +30,16 @@ export async function getStaticPaths() {
       estat: book.estat,
       isSerialized: book.isSerialized,
       dateSummary: book.dateSummary,
+      idioma: book.idioma,
       portada: book.portada,
     },
   }));
 }
 
-const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat, isSerialized, dateSummary, portada } = Astro.props;
+const { llibreId, llibreTitol, sinopsi, chapters, firstSlug, countLabel, estat, isSerialized, dateSummary, idioma, portada } = Astro.props;
 const sectionBlocks = groupItemsBySection(chapters);
 const hasSections = sectionBlocks.some((b) => b.seccio !== null);
+const bookLangBadge = getLangBadge(idioma);
 ---
 
 <BaseLayout title={`${llibreTitol} — Índex de l'obra | Scriptum`} description={sinopsi}>
@@ -79,12 +82,24 @@ const hasSections = sectionBlocks.some((b) => b.seccio !== null);
             {estat === 'acabat' ? '✓ Obra completa' : '📖 Obra en curs'}
           </span>
         </div>
-        <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)]">
-          {llibreTitol}
-        </h1>
-        <p class="font-serif text-base text-[var(--text-muted)] leading-relaxed">
-          {sinopsi}
-        </p>
+        <div data-original-lang={bookLangBadge?.lang} class="space-y-4">
+          <div class="flex items-start justify-between gap-3">
+            <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)]">
+              {llibreTitol}
+            </h1>
+            {bookLangBadge && (
+              <span
+                title={bookLangBadge.title}
+                class="notranslate shrink-0 mt-2 text-xs font-mono font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[var(--accent)] text-white shadow-2xs"
+              >
+                {bookLangBadge.code}
+              </span>
+            )}
+          </div>
+          <p class="font-serif text-base text-[var(--text-muted)] leading-relaxed">
+            {sinopsi}
+          </p>
+        </div>
 
         {dateSummary && (
           <p class="text-xs font-mono text-[var(--text-muted)]">

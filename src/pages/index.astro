@@ -74,6 +74,7 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
           estat={book.estat}
           dateSummary={book.dateSummary}
           anyPublicacio={book.anyPublicacio}
+          idioma={book.idioma}
           portada={book.portada}
         />
       ))}
@@ -108,6 +109,7 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
           tags={post.data.tags}
           image={post.data.image}
           readingTime={estimateReadingTime(post.body)}
+          idioma={post.data.idioma}
           esborrany={post.data.esborrany}
         />
       ))}

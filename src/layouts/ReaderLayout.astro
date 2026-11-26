@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import ReaderControls from '../components/ReaderControls.astro';
 import ShareButton from '../components/ShareButton.astro';
 import { isBlankPageType, type BookStatus, type RelatTipus } from '../utils/books';
+import { getLangBadge } from '../utils/lang';
 
 interface NavTarget {
   title: string;
@@ -22,6 +23,7 @@ interface Props {
   sinopsi?: string;
   tempsLectura?: string;
   bookStatus?: BookStatus;
+  idioma?: string;
   esborrany?: boolean;
   prevChapter?: NavTarget | null;
   nextChapter?: NavTarget | null;
@@ -39,13 +41,16 @@ const {
   sinopsi,
   tempsLectura,
   bookStatus = 'en-curs',
+  idioma,
   esborrany = false,
   prevChapter,
   nextChapter,
 } = Astro.props;
 
 const isBlank = isBlankPageType(tipus);
+const isPoem = tipus === 'poema';
 const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epileg';
+const langBadge = getLangBadge(idioma);
 ---
 
 <BaseLayout title={`${title} — ${llibre} | Scriptum`} description={sinopsi}>
@@ -66,7 +71,7 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
           {itemLabel}
         </span>
 
-        <div class="prose-blank-page max-w-xl mx-auto">
+        <div data-original-lang={langBadge?.lang} class="prose-blank-page max-w-xl mx-auto">
           <slot />
         </div>
 
@@ -90,9 +95,17 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
             )}
             <span>·</span>
             <span>{itemLabel}</span>
+            {langBadge && (
+              <span
+                title={langBadge.title}
+                class="notranslate text-[10px] font-mono font-bold tracking-wider px-2.5 py-0.5 rounded-full bg-[var(--accent)] text-white shadow-2xs"
+              >
+                {langBadge.code}
+              </span>
+            )}
           </div>
 
-          <h1 class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
+          <h1 data-original-lang={langBadge?.lang} class="font-display font-bold text-3xl sm:text-4xl text-[var(--text-primary)] leading-tight">
             {title}
           </h1>
 
@@ -105,14 +118,14 @@ const useDropCap = tipus === 'capitol' || tipus === 'proleg' || tipus === 'epile
           )}
 
           {sinopsi && (
-            <p class="text-sm italic text-[var(--text-muted)] max-w-xl mx-auto pt-2 leading-relaxed">
+            <p data-original-lang={langBadge?.lang} class="text-sm italic text-[var(--text-muted)] max-w-xl mx-auto pt-2 leading-relaxed">
               «{sinopsi}»
             </p>
           )}
         </header>
 
         <!-- Cos del text (Renderitzat de Markdown amb estil literari) -->
-        <div class={`prose-literaria ${useDropCap ? 'drop-cap' : ''}`}>
+        <div data-original-lang={langBadge?.lang} class={`prose-literaria ${useDropCap ? 'drop-cap' : ''} ${isPoem ? 'prose-poema' : ''}`}>
           <slot />
         </div>
 

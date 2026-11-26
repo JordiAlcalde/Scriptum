@@ -36,6 +36,7 @@ const { Content, headings } = await post.render();
   tags={post.data.tags}
   headings={headings}
   readingTime={estimateReadingTime(post.body)}
+  idioma={post.data.idioma}
   esborrany={post.data.esborrany}
   prevPost={prevPost}
   nextPost={nextPost}
