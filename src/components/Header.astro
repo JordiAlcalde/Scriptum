@@ -46,8 +46,21 @@ const currentPath = Astro.url.pathname;
       })}
     </nav>
 
-    <!-- Botons auxiliars: selector d'idioma i tema ràpid -->
+    <!-- Botons auxiliars: novetats, selector d'idioma i tema ràpid -->
     <div class="flex items-center gap-2">
+      <!-- Botó de Novetats (només visible quan hi ha contingut nou des de la darrera visita) -->
+      <button
+        id="updates-btn"
+        type="button"
+        class="hidden items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[var(--accent)] text-white text-[11px] font-mono font-semibold shadow-xs hover:opacity-90 transition-all cursor-pointer"
+        title="Hi ha novetats des de la teva darrera visita"
+        aria-label="Veure novetats"
+      >
+        <span>✦</span>
+        <span class="hidden sm:inline">Novetats</span>
+        <span id="updates-count" class="px-1.5 py-0.2 rounded-full bg-white/20 text-[10px]">0</span>
+      </button>
+
       <!-- Selector d'idioma CA / ES / EN -->
       <div
         id="lang-selector"
@@ -122,6 +135,55 @@ const currentPath = Astro.url.pathname;
   <!-- Contenidor ocult de Google Translate -->
   <div id="google_translate_element" class="hidden" aria-hidden="true"></div>
 </header>
+
+<!-- Finestra flotant de Novetats des de la darrera visita -->
+<div
+  id="updates-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-xs p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="updates-modal-title"
+>
+  <div class="max-w-lg w-full rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] p-6 sm:p-7 shadow-xl space-y-4">
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="w-8 h-8 rounded-lg bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center text-base shrink-0">
+          ✦
+        </span>
+        <div>
+          <h3 id="updates-modal-title" class="font-display font-bold text-lg text-[var(--text-primary)] leading-tight">
+            Novetats des de la teva darrera visita
+          </h3>
+          <p class="text-xs font-serif text-[var(--text-muted)]">
+            S'han afegit nous textos a Scriptum des de l'últim cop que hi vas passar.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <ul
+      id="updates-list"
+      class="max-h-72 overflow-y-auto divide-y divide-[var(--border-color)]/70 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)]"
+    ></ul>
+
+    <div class="pt-1 flex items-center justify-end gap-2.5 font-sans text-xs flex-wrap">
+      <button
+        id="updates-later-btn"
+        type="button"
+        class="px-4 py-2 rounded-xl border border-[var(--border-color)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-main)] transition-colors cursor-pointer"
+      >
+        Més tard
+      </button>
+      <button
+        id="updates-mark-seen-btn"
+        type="button"
+        class="px-4 py-2 rounded-xl bg-[var(--accent)] text-white font-semibold hover:opacity-90 transition-opacity cursor-pointer"
+      >
+        ✓ Marcar tot com a vist
+      </button>
+    </div>
+  </div>
+</div>
 
 <!-- Finestra flotant d'avís de traducció automàtica -->
 <div
@@ -387,5 +449,259 @@ const currentPath = Astro.url.pathname;
       }
     });
   });
+
+  // --- Detector de Novetats des de la darrera visita (sense BBDD, via localStorage) ---
+  interface CatalogPost { id: string; title: string; url: string; }
+  interface CatalogBook { id: string; title: string; url: string; }
+  interface CatalogChapter { id: string; bookId: string; bookTitle: string; label: string; title: string; url: string; }
+  interface CatalogPayload {
+    posts: CatalogPost[];
+    books: CatalogBook[];
+    chapters: CatalogChapter[];
+  }
+  interface UpdateEntry {
+    id: string;
+    kind: string;
+    title: string;
+    subtitle?: string;
+    url: string;
+    relatedIds: string[];
+  }
+
+  const SEEN_CATALOG_KEY = 'scriptum-seen-catalog';
+  const MODAL_DISMISSED_SESSION_KEY = 'scriptum-updates-dismissed';
+
+  const updatesBtn = document.getElementById('updates-btn');
+  const updatesCountEl = document.getElementById('updates-count');
+  const updatesModal = document.getElementById('updates-modal');
+  const updatesListEl = document.getElementById('updates-list');
+  const updatesLaterBtn = document.getElementById('updates-later-btn');
+  const updatesMarkSeenBtn = document.getElementById('updates-mark-seen-btn');
+
+  function getAllCatalogIds(catalog: CatalogPayload): string[] {
+    return [
+      ...catalog.posts.map((p) => p.id),
+      ...catalog.books.map((b) => b.id),
+      ...catalog.chapters.map((c) => c.id),
+    ];
+  }
+
+  function loadSeenIds(): string[] | null {
+    try {
+      const raw = localStorage.getItem(SEEN_CATALOG_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveSeenIds(ids: string[]) {
+    try {
+      localStorage.setItem(SEEN_CATALOG_KEY, JSON.stringify(Array.from(new Set(ids))));
+    } catch {}
+  }
+
+  function openUpdatesModal() {
+    updatesModal?.classList.remove('hidden');
+    updatesModal?.classList.add('flex');
+  }
+
+  function closeUpdatesModal() {
+    updatesModal?.classList.add('hidden');
+    updatesModal?.classList.remove('flex');
+  }
+
+  async function initUpdatesChecker() {
+    try {
+      const res = await fetch('/novetats.json', { cache: 'no-cache' });
+      if (!res.ok) return;
+      const catalog: CatalogPayload = await res.json();
+      const allIds = getAllCatalogIds(catalog);
+      const params = new URLSearchParams(window.location.search);
+      const isTestMode = params.get('prova-novetats') === '1';
+
+      let seenIds = loadSeenIds();
+
+      // Primera visita: desem silenciosament el catàleg actual sense molestar
+      if (!seenIds && !isTestMode) {
+        saveSeenIds(allIds);
+        return;
+      }
+
+      // Mode de prova (?prova-novetats=1): simulem que falten els 2 últims articles i 1 llibre
+      if (isTestMode) {
+        const simulatedMissing = new Set<string>([
+          ...catalog.posts.slice(0, 2).map((p) => p.id),
+          ...catalog.books.slice(0, 1).map((b) => b.id),
+        ]);
+        seenIds = allIds.filter((id) => !simulatedMissing.has(id));
+      }
+
+      const seenSet = new Set(seenIds || []);
+
+      // Si el lector ja està visitant ara mateix una pàgina nova, la marquem com a vista
+      const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+      let changedCurrent = false;
+      for (const p of catalog.posts) {
+        if (p.url === currentPath && !seenSet.has(p.id)) {
+          seenSet.add(p.id);
+          changedCurrent = true;
+        }
+      }
+      for (const b of catalog.books) {
+        if (b.url === currentPath && !seenSet.has(b.id)) {
+          seenSet.add(b.id);
+          catalog.chapters.filter((c) => c.bookId === b.id).forEach((c) => seenSet.add(c.id));
+          changedCurrent = true;
+        }
+      }
+      for (const c of catalog.chapters) {
+        if (c.url === currentPath && !seenSet.has(c.id)) {
+          seenSet.add(c.id);
+          changedCurrent = true;
+        }
+      }
+      if (changedCurrent && !isTestMode) {
+        saveSeenIds(Array.from(seenSet));
+      }
+
+      // Calculem novetats reals agrupant llibres nous en una sola fila
+      const newBookIds = new Set<string>();
+      const updates: UpdateEntry[] = [];
+
+      for (const book of catalog.books) {
+        if (!seenSet.has(book.id)) {
+          newBookIds.add(book.id);
+          const bookChapterIds = catalog.chapters
+            .filter((c) => c.bookId === book.id)
+            .map((c) => c.id);
+          updates.push({
+            id: book.id,
+            kind: 'Nou llibre',
+            title: book.title,
+            url: book.url,
+            relatedIds: [book.id, ...bookChapterIds],
+          });
+        }
+      }
+
+      for (const chap of catalog.chapters) {
+        if (!newBookIds.has(chap.bookId) && !seenSet.has(chap.id)) {
+          updates.push({
+            id: chap.id,
+            kind: chap.bookTitle,
+            title: chap.title,
+            subtitle: chap.label,
+            url: chap.url,
+            relatedIds: [chap.id],
+          });
+        }
+      }
+
+      for (const post of catalog.posts) {
+        if (!seenSet.has(post.id)) {
+          updates.push({
+            id: post.id,
+            kind: 'Blog',
+            title: post.title,
+            url: post.url,
+            relatedIds: [post.id],
+          });
+        }
+      }
+
+      if (updates.length === 0) return;
+
+      // Mostrem el botó a la barra superior
+      if (updatesBtn && updatesCountEl) {
+        updatesCountEl.textContent = String(updates.length);
+        updatesBtn.classList.remove('hidden');
+        updatesBtn.classList.add('inline-flex');
+      }
+
+      // Omplim la llista del modal
+      if (updatesListEl) {
+        updatesListEl.innerHTML = '';
+        updates.forEach((item) => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = item.url;
+          a.className =
+            'flex items-center justify-between gap-3 px-4 py-3 hover:bg-[var(--card-bg)] transition-colors group';
+
+          const left = document.createElement('div');
+          left.className = 'min-w-0';
+
+          const meta = document.createElement('span');
+          meta.className = 'block text-[10px] font-mono uppercase tracking-wider text-[var(--accent)] font-semibold';
+          meta.textContent = item.subtitle ? `${item.kind} · ${item.subtitle}` : item.kind;
+
+          const titleSpan = document.createElement('span');
+          titleSpan.className =
+            'block font-display font-semibold text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors truncate';
+          titleSpan.textContent = item.title;
+
+          left.appendChild(meta);
+          left.appendChild(titleSpan);
+
+          const arrow = document.createElement('span');
+          arrow.className = 'text-xs font-sans font-semibold text-[var(--accent)] shrink-0';
+          arrow.textContent = 'Llegir →';
+
+          a.appendChild(left);
+          a.appendChild(arrow);
+
+          a.addEventListener('click', () => {
+            if (!isTestMode) {
+              item.relatedIds.forEach((rid) => seenSet.add(rid));
+              saveSeenIds(Array.from(seenSet));
+            }
+          });
+
+          li.appendChild(a);
+          updatesListEl.appendChild(li);
+        });
+      }
+
+      updatesBtn?.addEventListener('click', openUpdatesModal);
+
+      updatesLaterBtn?.addEventListener('click', () => {
+        try {
+          sessionStorage.setItem(MODAL_DISMISSED_SESSION_KEY, '1');
+        } catch {}
+        closeUpdatesModal();
+      });
+
+      updatesMarkSeenBtn?.addEventListener('click', () => {
+        if (!isTestMode) {
+          saveSeenIds(allIds);
+        }
+        closeUpdatesModal();
+        updatesBtn?.classList.add('hidden');
+        updatesBtn?.classList.remove('inline-flex');
+      });
+
+      updatesModal?.addEventListener('click', (e) => {
+        if (e.target === updatesModal) {
+          try {
+            sessionStorage.setItem(MODAL_DISMISSED_SESSION_KEY, '1');
+          } catch {}
+          closeUpdatesModal();
+        }
+      });
+
+      // Obrim automàticament la finestra emergent un sol cop per sessió (o sempre en mode prova)
+      const alreadyDismissed = sessionStorage.getItem(MODAL_DISMISSED_SESSION_KEY) === '1';
+      if (isTestMode || !alreadyDismissed) {
+        openUpdatesModal();
+      }
+    } catch {
+      // Si falla la càrrega del catàleg, no interrompem la lectura
+    }
+  }
+
+  initUpdatesChecker();
 </script>
 

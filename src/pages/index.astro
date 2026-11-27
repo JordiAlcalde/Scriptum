@@ -11,7 +11,8 @@ import { isVisibleEntry } from '../utils/drafts';
 const allRelats = await getCollection('relats', isVisibleEntry);
 const allPosts = await getCollection('blog', isVisibleEntry);
 
-const booksList = groupBooks(allRelats);
+const allBooks = groupBooks(allRelats);
+const recentBooks = allBooks.slice(0, 3);
 const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()).slice(0, 3);
 ---
 
@@ -56,14 +57,17 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
         </h2>
       </div>
 
-      <a href="/relats" class="text-xs font-sans font-semibold text-[var(--accent)] hover:underline inline-flex items-center gap-1">
-        <span>Totes les obres</span>
+      <a
+        href="/relats"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] text-xs font-sans font-semibold text-[var(--text-primary)] hover:text-[var(--accent)] transition-all shadow-2xs shrink-0"
+      >
+        <span>Visitar tota la biblioteca ({allBooks.length} obres)</span>
         <span>→</span>
       </a>
     </div>
 
     <div class="grid grid-cols-1 gap-6">
-      {booksList.map((book) => (
+      {recentBooks.map((book) => (
         <BookCard
           llibreId={book.id}
           titol={book.titol}
@@ -93,8 +97,11 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
         </h2>
       </div>
 
-      <a href="/blog" class="text-xs font-sans font-semibold text-[var(--accent)] hover:underline inline-flex items-center gap-1">
-        <span>Tots els articles</span>
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] hover:border-[var(--accent)] text-xs font-sans font-semibold text-[var(--text-primary)] hover:text-[var(--accent)] transition-all shadow-2xs shrink-0"
+      >
+        <span>Tots els articles ({allPosts.length})</span>
         <span>→</span>
       </a>
     </div>
@@ -114,6 +121,124 @@ const recentPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
         />
       ))}
     </div>
+  </section>
+
+  <!-- DESPLEGABLE INFORMATIU: TOT EL QUE SCRIPTUM AMAGA -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 pb-8">
+    <details class="group rounded-2xl border border-[var(--border-color)] bg-[var(--card-bg)] shadow-2xs transition-all">
+      <summary class="list-none cursor-pointer px-6 py-5 flex items-center justify-between gap-4 select-none">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="w-8 h-8 rounded-lg bg-[var(--accent)]/12 text-[var(--accent)] flex items-center justify-center text-sm shrink-0">
+            ✦
+          </span>
+          <div class="min-w-0">
+            <span class="block font-display font-bold text-base sm:text-lg text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors">
+              Entra aquí per descobrir tot el que Scriptum amaga
+            </span>
+            <span class="block text-xs font-serif text-[var(--text-muted)]">
+              Petites comoditats pensades per fer-te la lectura més agradable, al teu ritme i sense registres.
+            </span>
+          </div>
+        </div>
+
+        <svg
+          class="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--accent)] group-open:rotate-180 transition-transform duration-200 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </summary>
+
+      <div class="px-6 pb-6 pt-2 border-t border-[var(--border-color)]/70">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span>📜</span>
+              <span>Tres tons de lectura</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Canvia quan vulguis entre <strong>Paper</strong>, <strong>Sèpia</strong> i <strong>Nocturn</strong> des de la barra superior o dins del lector.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span class="font-mono text-xs text-[var(--accent)]">A−/A+</span>
+              <span>Mida de lletra ajustable</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Dins de cada llibre pots ampliar o reduir la mida del text perquè llegir en pantalla no cansi mai la vista.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span>🔖</span>
+              <span>Punt de llibre i control de lectura</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Scriptum recorda automàticament en quin capítol ho vas deixar i marca amb <strong>✓ Llegit</strong> el que ja has acabat, directament al teu navegador.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span class="text-[var(--accent)]">✦</span>
+              <span>Avís automàtic de novetats</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Quan tornis al web, t'avisarà dels nous articles, llibres o capítols afegits des de la teva darrera visita —fins i tot textos antics recuperats.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span>🌐</span>
+              <span>Traducció opcional (CA · ES · EN)</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Pots traduir el web al castellà o a l'anglès des del selector superior, respectant sempre intactes els textos escrits originalment en aquests idiomes.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span>🏷️</span>
+              <span>Etiquetes i ordenació</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Al blog pots filtrar els articles per etiquetes (cadascuna amb la seva definició) i a la biblioteca pots ordenar les obres per data o per títol.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span>⏱️</span>
+              <span>Temps de lectura, índexs i notes</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Cada text indica els minuts estimats de lectura; els articles llargs inclouen índex d'apartats i notes al peu clicables amb enllaços de referència.
+            </p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-[var(--border-color)]/70 bg-[var(--bg-main)] space-y-1">
+            <h3 class="font-display font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
+              <span>🔗</span>
+              <span>Compartir i lectura sense rastreig</span>
+            </h3>
+            <p class="text-xs font-serif text-[var(--text-muted)] leading-relaxed">
+              Comparteix qualsevol obra o article en un clic, en un espai tranquil sense anuncis, sense comptes d'usuari ni galetes invasives.
+            </p>
+          </div>
+        </div>
+      </div>
+    </details>
   </section>
 </BaseLayout>
 
